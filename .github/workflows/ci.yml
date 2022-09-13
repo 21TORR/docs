@@ -24,9 +24,7 @@ jobs:
                     version: 'latest'
                     run_install: true
 
-            -   run: pnpm build
-
-            -   run: pnpm typecheck
-
             -   name: Prettify package.json
                 run: ./node_modules/.bin/prettier-package-json --use-tabs --list-different
+
+            -   run: pnpm build
