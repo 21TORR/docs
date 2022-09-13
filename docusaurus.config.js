@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
 	title: '21TORR Docs',
 	tagline: 'The documentation for all our tools',
-	url: 'https://your-docusaurus-test-site.com',
+	url: 'https://21torr-docs.fly.dev/',
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
@@ -59,9 +59,15 @@ const config = {
 				items: [
 					{
 						type: 'doc',
-						docId: 'intro',
+						docId: 'package/index',
 						position: 'left',
-						label: 'Tutorial',
+						label: 'Packages',
+					},
+					{
+						type: 'doc',
+						docId: 'process/index',
+						position: 'left',
+						label: 'Process',
 					},
 					{to: '/blog', label: 'Blog', position: 'left'},
 					{
@@ -78,8 +84,12 @@ const config = {
 						title: 'Docs',
 						items: [
 							{
-								label: 'Tutorial',
-								to: '/docs/intro',
+								label: 'Packages',
+								to: '/docs/package',
+							},
+							{
+								label: 'Process',
+								to: '/docs/process',
 							},
 							{
 								label: 'Blog',
