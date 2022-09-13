@@ -10,7 +10,7 @@ env:
 
 jobs:
     build:
-        uses: 21torr/docs/.github/workflows/ci.yml@master
+        uses: 21torr/docs/.github/workflows/ci.yml@live
 
     deploy:
         name: Deploy to Fly.io
