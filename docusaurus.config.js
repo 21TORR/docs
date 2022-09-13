@@ -46,7 +46,7 @@ const config = {
             'https://github.com/21TORR/docs/tree/live/blog/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+					customCss: require.resolve('./assets/scss/custom.scss'),
         },
       }),
     ],
