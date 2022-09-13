@@ -1,0 +1,30 @@
+name: CI
+
+on:
+    pull_request:
+        branches:
+            - '**'
+
+jobs:
+    build-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout Code
+                uses: actions/checkout@v3
+
+            -   uses: actions/setup-node@v3
+                with:
+                    node-version: 16
+
+            -   uses: pnpm/action-setup@v2
+                with:
+                    version: 'latest'
+                    run_install: true
+
+            -   run: pnpm build
+
+            -   run: pnpm typecheck
+
+            -   name: Prettify package.json
+                run: ./node_modules/.bin/prettier-package-json --use-tabs --list-different
