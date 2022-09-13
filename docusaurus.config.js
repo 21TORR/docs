@@ -11,7 +11,7 @@ const config = {
 	url: 'https://21torr-docs.fly.dev/',
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
-	onBrokenMarkdownLinks: 'warn',
+	onBrokenMarkdownLinks: 'throw',
 	favicon: 'img/favicon.ico',
 
 	plugins: [
