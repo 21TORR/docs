@@ -30,7 +30,7 @@ jobs:
 
             -   run: pnpm build
 
-            -   uses: actions/upload-artifact
+            -   uses: actions/upload-artifact@v3
                 with:
                     name: build-dir
                     path: build/
