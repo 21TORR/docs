@@ -23,6 +23,7 @@ jobs:
             -   uses: actions/download-artifact@v3
 
             -   run: ls -alh .
+            -   run: ls -alh build
             -   uses: superfly/flyctl-actions/setup-flyctl@master
 
             -   run: flyctl deploy --remote-only
