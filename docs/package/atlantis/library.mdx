@@ -1,1 +1,331 @@
+---
+toc_max_heading_level: 4
+---
+
 # Atlantis Library
+## Usage
+
+Normally, you just import it in your `helpers/_mixins.scss`:
+
+```scss
+@forward "~@21torr/atlantis/mixins" as atlantis;
+```
+
+and your remaining application just uses your `_mixins.scss` then.
+
+
+
+## Mixins
+### Container
+#### `.centered-container()` {#mixins/container/centered-container}
+
+```scss
+@include atlantis.centered-container($max-width, $min-margin);
+```
+
+Renders a centered container. The container will always have a horizontal margin of `$min-margin` to the browser edge, but will at most be `$max-width` wide. It will be horizontally centered.
+
+
+
+### Font
+#### `.emoji-fonts()` {#mixins/font/emoji-fonts}
+
+```scss
+@include atlantis.emoji-fonts('Some Font', Georgia);
+```
+
+Renders a `font-family` declaration and automatically appends all required fonts to support emojis.
+
+
+#### `.system-fonts()` {#mixins/font/system-fonts}
+
+```scss
+@include atlantis.system-fonts('Some Font', Georgia);
+```
+
+Renders a `font-family` declaration and automatically appends all fallback fonts (including to support emojis).
+
+
+
+### Interaction
+#### `.on-interaction()` {#mixins/interaction/on-interaction}
+
+```scss
+@include atlantis.on-interaction($active-class: null) { @content }
+```
+
+Applies the `@content` if the user interacts with the element (`active`, `hover`, `focus`).
+You can pass an additional `$active-class`, if you manually want to generate an "active" class as well.
+
+Usage:
+
+```scss
+a {
+	color: red;
+
+	@include atlantis.on-interaction("is-active") {
+		color: blue;
+	}
+}
+```
+
+
+
+### Media Query
+
+Ideally, you should always wrap these mixins into your own, custom and named mixins like
+
+- `on-phone-only()` (for width <= phone)
+- `on-tablet()` (for width >= tablet)
+- `on-desktop()` (for width >= desktop)
+
+
+#### `.on-max-height()` {#mixins/media-query/on-max-height}
+
+```scss
+@include atlantis.on-max-height($height) { @content }
+```
+
+Media query for content that should apply if the browser height `<= $height`.
+
+Supports `rem` and `px` values.
+
+
+#### `.on-max-width()` {#mixins/media-query/on-max-width}
+
+```scss
+@include atlantis.on-max-width($width) { @content }
+```
+
+Media query for content that should apply if the browser width `<= $width`.
+
+Supports `rem` and `px` values.
+
+
+#### `.on-min-height()` {#mixins/media-query/on-min-height}
+
+``` scss
+@include atlantis.on-min-height($height) { @content }
+```
+
+Media query for content that should apply if the browser height `>= $height`.
+
+Supports `rem` and `px` values.
+
+
+#### `.on-min-width()` {#mixins/media-query/on-min-width}
+
+```scss
+@include atlantis.on-min-width($width) { @content }
+```
+
+Media query for content that should apply if the browser width `>= $width`.
+
+Supports `rem` and `px` values.
+
+
+
+### Position
+#### `.center-children()` {#mixins/position/center-children}
+
+```scss
+@include atlantis.center-children;
+```
+
+Centers all children. Sets `display: flex` with the centering settings on the element.
+
+
+#### `.center-element()` {#mixins/position/center-element}
+
+```scss
+@include atlantis.center-element;
+```
+
+Centers the element in the parent. Sets `position: absolute` + transforms on the element.
+
+
+#### `.fill-parent()` {#mixins/position/fill-parent}
+
+```scss
+@include atlantis.fill-parent;
+```
+
+Positions (via `position: absolute`) the element in the parent, so that it completely covers the parent.
+
+
+#### `.flex-equal-columns()` {#mixins/position/flex-equal-columns}
+
+```scss
+@include atlantis.flex-equal-columns;
+```
+
+Will set sibling elements to flex-based equal columns.
+
+
+#### `.flex-fill-height()` {#mixins/position/flex-fill-height}
+
+```scss
+@include atlantis.flex-fill-height;
+```
+
+Sets the element to automatically fill the remaining height. Should be used with `flex-direction: column` on the parent.
+
+
+#### `.flex-fill-width()` {#mixins/position/flex-fill-width}
+
+```scss
+@include atlantis.flex-fill-width;
+```
+
+Sets the element to automatically fill the remaining width.
+
+
+#### `.flex-fixed-height()` {#mixins/position/flex-fixed-height}
+
+
+```scss
+@include atlantis.flex-fixed-height($height);
+```
+
+Sets the element to a fixed flex height. It won't be resized in the flex context. Should be used with `flex-direction: column` on the parent.
+
+Takes an optional `$height` to manually fixate the size. If you omit it, it will just keeps its inherent size.
+
+
+#### `.flex-fixed-width()` {#mixins/position/flex-fixed-width}
+
+```scss
+@include atlantis.flex-fixed-width($width);
+```
+
+Sets the element to a fixed flex width. It won't be resized in the flex context.
+
+Takes an optional `$width` to manually fixate the size. If you omit it, it will just keeps its inherent size.
+
+
+
+### Scroll
+#### `.smooth-scroll()` {#mixins/scroll/smooth-scroll}
+
+```scss
+@include atlantis.smooth-scroll;
+```
+
+Lets the element smooth scroll.
+
+:::warning
+Will also set `overflow: scroll`, so you will always have scroll bars on desktop.
+:::
+
+
+
+### Size
+#### `.aspect-ratio()` {#mixins/size/aspect-ratio}
+
+```scss
+@include atlantis.aspect-ratio($width, $height);
+```
+
+Applies the aspect-ratio trick (with `padding-bottom` and `height: 0`).
+
+You should use it with just the aspect ratios:
+
+```scss
+video {
+	@include atlantis.aspect-ratio(16, 9);
+}
+```
+
+
+#### `.square()` {#mixins/size/square}
+
+```scss
+@include atlantis.square($size);
+```
+
+Sets `$width` and `$height` to the same `$size` value.
+
+
+
+### SVG
+#### `.color-svg()` {#mixins/svg/color-svg}
+
+```scss
+@include atlantis.color-svg($color);
+```
+
+Sets the SVG coloring. It will set the `fill` for any child class `._f` and the `stroke` for any child class `._s`.
+
+
+#### `.svg-child()` {#mixins/svg/svg-child}
+
+```scss
+@include atlantis.svg-child;
+```
+
+Applies `display: block` to any `svg` child and automatically stretches it to it's parent size.
+Normally you want to use that for any svg and set the dimensions on the parent DOM element.
+
+
+
+### Transition
+#### `.transition()` {#mixins/transition/transition}
+
+```scss
+@include atlantis.transition($properties, $duration: .15s, $easing: ease-in-out, $will-change: true);
+```
+
+Will automatically set `will-change` on the given properties and apply the transitions for all properties.
+
+Normally, you can leave the default value of everything, to have consistent look and feel.
+
+Usage:
+
+```scss
+button {
+	@include atlantis.transition(width height, .5s);
+}
+```
+
+
+
+### Visibility
+#### `.hide-text()` {#mixins/visibility/hide-text}
+
+```scss
+@include atlantis.hide-text($absolute: false);
+```
+
+Will hide the text, so that it's invisible on normal page views, but readable for screen readers.
+
+If, for some reason, the default behavior doesn't work, you can try to move the text by an `vw` value, by setting
+`$absolute: true`.
+
+
+#### `.text-overflow-ellipsis()` {#mixins/visibility/text-overflow-ellipsis}
+
+```scss
+@include atlantis.text-overflow-ellipsis;
+```
+
+Prevents wrapping of text by displaying ellipsis instead.
+
+
+
+## Functions
+### SVG
+#### `.inline-svg()` {#functions/svg/inline-svg}
+
+```scss
+@include atlantis.inline-svg($svg);
+```
+
+Inlines the SVG on the element. Will return a `url()` element so it can be used directly as an image.
+
+Usage:
+
+```scss
+.element {
+	background-image: atlantis.inline-svg('<svg...>...</svg>');
+}
+```

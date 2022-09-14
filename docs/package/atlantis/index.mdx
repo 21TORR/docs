@@ -1,1 +1,67 @@
 # Atlantis
+
+**Atlantis** is a library, that combines a lot of commonly used patterns in SCSS.
+
+
+## Installation
+
+```bash
+pnpm install @21torr/atlantis
+```
+
+
+## Reset
+
+Atlantis bundles a reset, that resets the browser default styles
+
+- Removes all padding and margin
+- Applies `box-sizing: border-box` to everything.
+- Resets all list styling (it should be reapplied in your `.content`)
+- Unifies SVG styling across the app.
+- Unifies form element styling
+- Improves global text styling
+
+Usage:
+
+```scss
+@use "~@21torr/atlantis/reset";
+```
+
+This import belongs in your SCSS entry file.
+
+
+## Mixins
+
+All available mixins:
+
+- [`aspect-ratio()`](library#mixins/size/aspect-ratio)
+- [`center-children()`](library#mixins/position/center-children)
+- [`center-element()`](library#mixins/position/center-element)
+- [`centered-container()`](library#mixins/container/centered-container)
+- [`color-svg()`](library#mixins/svg/color-svg)
+- [`emoji-fonts()`](library#mixins/font/emoji-fonts)
+- [`fill-parent()`](library#mixins/position/fill-parent)
+- [`flex-equal-columns()`](library#mixins/position/flex-equal-columns)
+- [`flex-fill-height()`](library#mixins/position/flex-fill-height)
+- [`flex-fill-width()`](library#mixins/position/flex-fill-width)
+- [`flex-fixed-height()`](library#mixins/position/flex-fixed-height)
+- [`flex-fixed-width()`](library#mixins/position/flex-fixed-width)
+- [`hide-text()`](library#mixins/visibility/hide-text)
+- [`on-interaction()`](library#mixins/interaction/on-interaction)
+- [`on-max-height()`](library#mixins/media-query/on-max-height)
+- [`on-max-width()`](library#mixins/media-query/on-max-width)
+- [`on-min-height()`](library#mixins/media-query/on-min-height)
+- [`on-min-width()`](library#mixins/media-query/on-min-width)
+- [`smooth-scroll()`](library#mixins/scroll/smooth-scroll)
+- [`square()`](library#mixins/size/square)
+- [`svg-child()`](library#mixins/svg/svg-child)
+- [`system-fonts()`](library#mixins/font/system-fonts)
+- [`text-overflow-ellipsis()`](library#mixins/visibility/text-overflow-ellipsis)
+- [`transition()`](library#mixins/transition/transition)
+
+
+## Functions
+
+All available functions:
+
+- [`inline-svg()`](library#functions/svg/inline-svg)
