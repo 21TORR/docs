@@ -1,0 +1,17 @@
+.headline {
+	--ifm-leading: .5rem;
+	font-weight: var(--ifm-heading-font-weight);
+	color: var(--ifm-color-info-darkest);
+}
+
+.table {
+	font-size: .8rem;
+	margin-bottom: 0;
+	width: 100%;
+	display: table;
+
+	th,
+	td {
+		padding: calc(0.5 * var(--ifm-table-cell-padding));
+	}
+}

@@ -1,3 +1,5 @@
+import {Spec} from "@site/src/components/Spec";
+
 # firefly.js
 
 Firefly is configured by putting a `firefly.js` in the root of your project. This file imports the main `Firefly` class and must return a (configured) instance of it.
@@ -43,27 +45,46 @@ module.exports = (new Firefly())
 
 Adds JS / TypeScript entries.
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `entries` | `Record<string, string>` | - | The entry files. Key is the name of the entry, value is the relative path to the file. |
-
-Example:
-
-```javascript
-.js({
-	app: "asset/js/app.ts",
-	backend: "asset/js/backend.js",
-})
-```
+<Spec
+	language="js"
+	params={[
+		{
+			name: "entries",
+			type: "Record<string,string>",
+			description: "The entry files. Key is the name of the entry, value is the relative path to the file.",
+		},
+	]}
+>
+	{`
+		.js({
+			app: "asset/js/app.ts",
+			backend: "asset/js/backend.js",
+		})
+	`}
+</Spec>
 
 
 ### `.scss(entries)`
 
 Adds SCSS entries.
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `entries` | `Record<string, string>` | - | The entry files. Key is the name of the entry, value is the relative path to the file. |
+<Spec
+	language="js"
+	params={[
+		{
+			name: "entries",
+			type: "Record<string,string>",
+			description: "The entry files. Key is the name of the entry, value is the relative path to the file.",
+		},
+	]}
+>
+	{`
+		.scss({
+			app: "asset/scss/app.scss",
+			backend: "asset/scss/backend.scss",
+		})
+	`}
+</Spec>
 
 
 ### `.outputTo(path)`
@@ -71,27 +92,73 @@ Adds SCSS entries.
 Sets the output path, where the compiled files will be stored.
 This is only the base path, the `js/` and `scss/` subdirectories will be created automatically.
 
-If you don't configure anything, files will be built to `build/` by default
+If you don't configure anything, files will be built to `build/` by default.
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `path` | `string` | `"build"` | The path where to store the built files. |
+<Spec
+	language="js"
+	params={[
+		{
+			name: "path",
+			type: "string",
+			description: "The path where to store the built files.",
+		},
+	]}
+>
+	{`
+		.outputTo("some/path")
+	`}
+</Spec>
 
 
 ### `.withExternals(externals)`
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `externals` | `Record<string, string>` | - | ?. |
+Defines external packages on what they should compile to.
+
+This is basically the following transformation:
+
+```js
+const jQuery = require("jquery");
+// ↑ this will compile to ↓
+const jQuery = window.jQuery;
+```
+
+<Spec
+	language="js"
+	params={[
+		{
+			name: "externals",
+			type: "Record<string, string>",
+			description: "A map from the import names to the global variable.",
+		},
+	]}
+>
+	{`
+		.withExternals({
+			ckeditor: "window.ClassicEditor",
+			jquery: "window.jQuery",
+		})
+	`}
+</Spec>
 
 
 ### `.compilePackages(...packages)`
 
 Defines all package names, that should be compiled from `node_modules`. Will be prefix-matched, so it can be a concrete package name or a organization name.
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| `packages` | `string` | - | The names of the packages to compile. |
+<Spec
+	language="js"
+	params={[
+		{
+			name: "...packages",
+			type: "string",
+			description: "The names of the packages to compile.",
+		},
+	]}
+>
+	{`
+		.compilePackages("package-1", "@vendor/package-2")
+	`}
+</Spec>
 
 :::tip
 Packages from the `@21torr` organization will be compiled by default.
