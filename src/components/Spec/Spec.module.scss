@@ -1,0 +1,18 @@
+.spec {
+	margin-bottom: var(--ifm-spacing-vertical);
+	padding: 1rem;
+	border-radius: calc(1rem + var(--ifm-code-border-radius));
+	box-shadow: 0 2px 4px 0 rgba(135, 216, 242, 0.1);
+
+	@at-root html[data-theme='light'] & {
+		box-shadow: 0 2px 4px 0 rgba(59, 139, 165, 0.1);
+	}
+
+	> * + * {
+		margin-top: var(--ifm-spacing-vertical);
+	}
+}
+
+.codeBlock {
+	--ifm-leading: .5rem;
+}
