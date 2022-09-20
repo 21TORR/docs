@@ -1,0 +1,18 @@
+# Testing
+
+We use [PHPUnit](https://phpunit.de/) and [Symfonys own testing infrastructure](https://symfony.com/doc/current/testing.html) to write our tests.
+
+We use the newest PHPUnit version directly, and install the Symfony PHPUnit Bridge, so that we have the Symfony PHPUnit extension listener.
+
+```bash
+composer require phpunit/phpunit symfony/phpunit-bridge
+```
+
+Then you need to register Symfonys Test Listener, please follow the [official guide](https://symfony.com/doc/current/components/phpunit_bridge.html#installation).
+Adjust the `phpunit.xml` config file to your needs.
+
+Afterwards you can run your tests with
+
+```bash
+./vendor/bin/phpunit
+```
