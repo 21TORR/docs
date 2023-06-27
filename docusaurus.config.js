@@ -1,4 +1,6 @@
-// @ts-check
+// @ts-check The whole file be checked
+
+// @ts-ignore this package has no types
 const {themes} = require('prism-react-renderer');
 
 /** @type {import('@docusaurus/types').Config} */
