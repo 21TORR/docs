@@ -34,12 +34,12 @@ Fetch the `FeatureFlags` service:
 
 public function myAction (FeatureFlags $flags) : Response
 {
-	if (!$flags->hasFeature("login"))
-	{
-		throw $this->createNotFoundException("Login disabled.");
-	}
+    if (!$flags->hasFeature("login"))
+    {
+        throw $this->createNotFoundException("Login disabled.");
+    }
 
-	return $this->render(...);
+    return $this->render(...);
 }
 ```
 

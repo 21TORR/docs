@@ -1,0 +1,42 @@
+# Embed Helpers
+
+The embed helpers bundle is a Symfony bundle that helps dealing with platform that allow embedding content (like video platforms).
+
+
+## Installation
+
+```bash
+composer req 21torr/embed-helpers
+```
+
+## Usage
+
+Right now, only the video platforms integration is implemented.
+
+
+### Video Platforms
+
+You can fetch the `VideoUrlParser` service to parse video URLs and get details about the video:
+
+
+```php
+public function myAction (VideoUrlParser $videoUrlParser)
+{
+    $details = $videoUrlParser->parseVideoUrl("https://www.youtube.com/...");
+}
+```
+
+
+The details include:
+
+```php
+$video->id // the video id
+$video->platform // the platform where this video is hosted (currently Vimeo and YouTube only)
+$video->videoTyp // the type of the video
+
+$details->getEmbedUrl() // will give you the normalized embed URL to use this video in your app
+```
+
+The video types will be one of
+- `"short"` for a YouTube shorts URL
+- `"video"` for all other recognized video URLs
