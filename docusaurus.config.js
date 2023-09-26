@@ -68,7 +68,7 @@ const config = {
 						position: 'left',
 						label: 'Conventions',
 					},
-					{to: '/blog', label: 'Blog', position: 'left'},
+					{to: '/blog', label: 'Changelog', position: 'left'},
 					{
 						href: 'https://www.21torr.com',
 						label: 'Contact',
@@ -91,7 +91,7 @@ const config = {
 								to: '/docs/conventions',
 							},
 							{
-								label: 'Blog',
+								label: 'Changelog',
 								to: '/blog',
 							},
 						],
