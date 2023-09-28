@@ -58,17 +58,27 @@ const config = {
 				items: [
 					{
 						type: 'doc',
-						docId: 'package/index',
+						docId: 'php/index',
 						position: 'left',
-						label: 'Packages',
+						label: 'PHP',
 					},
 					{
 						type: 'doc',
-						docId: 'conventions/index',
+						docId: 'ts-scss/index',
 						position: 'left',
-						label: 'Conventions',
+						label: 'TS & SCSS',
 					},
-					{to: '/blog', label: 'Changelog', position: 'left'},
+					{
+						type: 'doc',
+						docId: 'tools/index',
+						position: 'left',
+						label: 'Tools',
+					},
+					{
+						to: '/blog',
+						label: 'Changelog',
+						position: 'right',
+					},
 					{
 						href: 'https://www.21torr.com',
 						label: 'Contact',
@@ -83,12 +93,16 @@ const config = {
 						title: 'Docs',
 						items: [
 							{
-								label: 'Packages',
-								to: '/docs/package',
+								label: 'PHP',
+								to: '/docs/php',
 							},
 							{
-								label: 'Conventions',
-								to: '/docs/conventions',
+								label: 'TS & SCSS',
+								to: '/docs/ts-scss',
+							},
+							{
+								label: 'Tools',
+								to: '/docs/tools',
 							},
 							{
 								label: 'Changelog',
