@@ -58,15 +58,15 @@ const config = {
 				items: [
 					{
 						type: 'doc',
-						docId: 'bundles/index',
+						docId: 'php/index',
 						position: 'left',
-						label: 'Bundles',
+						label: 'PHP',
 					},
 					{
 						type: 'doc',
-						docId: 'packages/index',
+						docId: 'ts-scss/index',
 						position: 'left',
-						label: 'Packages',
+						label: 'TS & SCSS',
 					},
 					{
 						type: 'doc',
@@ -93,12 +93,12 @@ const config = {
 						title: 'Docs',
 						items: [
 							{
-								label: 'Bundles',
-								to: '/docs/bundles',
+								label: 'PHP',
+								to: '/docs/php',
 							},
 							{
-								label: 'Packages',
-								to: '/docs/packages',
+								label: 'TS & SCSS',
+								to: '/docs/ts-scss',
 							},
 							{
 								label: 'Tools',
