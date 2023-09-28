@@ -58,17 +58,27 @@ const config = {
 				items: [
 					{
 						type: 'doc',
-						docId: 'package/index',
+						docId: 'bundles/index',
+						position: 'left',
+						label: 'Bundles',
+					},
+					{
+						type: 'doc',
+						docId: 'packages/index',
 						position: 'left',
 						label: 'Packages',
 					},
 					{
 						type: 'doc',
-						docId: 'conventions/index',
+						docId: 'tools/index',
 						position: 'left',
-						label: 'Conventions',
+						label: 'Tools',
 					},
-					{to: '/blog', label: 'Changelog', position: 'left'},
+					{
+						to: '/blog',
+						label: 'Changelog',
+						position: 'right',
+					},
 					{
 						href: 'https://www.21torr.com',
 						label: 'Contact',
@@ -83,12 +93,16 @@ const config = {
 						title: 'Docs',
 						items: [
 							{
-								label: 'Packages',
-								to: '/docs/package',
+								label: 'Bundles',
+								to: '/docs/bundles',
 							},
 							{
-								label: 'Conventions',
-								to: '/docs/conventions',
+								label: 'Packages',
+								to: '/docs/packages',
+							},
+							{
+								label: 'Tools',
+								to: '/docs/tools',
 							},
 							{
 								label: 'Changelog',
