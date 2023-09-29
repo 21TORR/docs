@@ -1,0 +1,27 @@
+---
+sidebar_position: 30
+---
+
+# Recommended Directory Structure
+
+```text
+src/
+  └─ Storyblok/
+     ├─ Api/
+     ├─ Component/
+     │  ├─ Block/
+     │  ├─ Document/
+     │  ├─ Story/
+     │  ├─ Widget/
+     │  ├─ ComponentGroup.php
+     │  └─ ComponentTag.php
+     └ Field/
+        └─ Composite/
+```
+
+Comments:
+
+- Add a single project-wide enum to group all component groups and tags.
+- Put all standalone components into `Document/` and (as needed) their stories in `Story/`.
+- Put all nested components into either `Block/` or `Widget/` (or a different namespace, if fitting).
+- You can add a `Composite/` directory for your composite fields.
