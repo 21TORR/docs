@@ -11,8 +11,13 @@ import NpmLogo from "./icons/npm.svg";
 /**
  * Parses a package name from a URL
  */
-function parsePackageName (url: string)
+function parsePackageName (url?: string)
 {
+	if (!url)
+	{
+		return undefined;
+	}
+
 	const match = /\/(?<name>[^\/]+\/[^\/]+)\/?$/.exec(url);
 
 	if (!match)
@@ -38,13 +43,6 @@ export function LinkList (props: LinkListProps): ReactElement | null
 		return null;
 	}
 
-	const composerPackage = props.packagist
-		? parsePackageName(props.packagist)
-		: undefined;
-	const npmPackage = props.npm
-		? parsePackageName(props.npm)
-		: undefined;
-
 	return (
 		<ul className={styles.linklist}>
 			{props.github && (
@@ -52,8 +50,9 @@ export function LinkList (props: LinkListProps): ReactElement | null
 					<Link
 						to={props.github}
 						className={styles.link}
+						title="Link to Github repository"
 					>
-						<span className={styles.icon}><GithubLogo /></span> Github
+						<code className={styles.code}><span className={styles.icon}><GithubLogo /></span> {parsePackageName(props.github)}</code>
 					</Link>
 				</li>
 			)}
@@ -62,9 +61,9 @@ export function LinkList (props: LinkListProps): ReactElement | null
 					<Link
 						to={props.npm}
 						className={styles.link}
-						title="Link to npm"
+						title="Link to npm package"
 					>
-						<code className={styles.code}><span className={`${styles.icon} ${styles.npmIcon}`}><NpmLogo /></span> {npmPackage}</code>
+						<code className={styles.code}><span className={`${styles.icon} ${styles.npmIcon}`}><NpmLogo /></span> {parsePackageName(props.npm)}</code>
 					</Link>
 				</li>
 			)}
@@ -73,9 +72,9 @@ export function LinkList (props: LinkListProps): ReactElement | null
 					<Link
 						to={props.packagist}
 						className={styles.link}
-						title="Link to packagist.org"
+						title="Link to composer package on packagist.org"
 					>
-						<code className={styles.code}><span className={styles.icon}><img src={packagistLogo} alt="" /></span> {composerPackage}</code>
+						<code className={styles.code}><span className={styles.icon}><img src={packagistLogo} alt="" /></span> {parsePackageName(props.packagist)}</code>
 					</Link>
 				</li>
 			)}
