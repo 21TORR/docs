@@ -1,0 +1,55 @@
+---
+sidebar_position: 100
+---
+
+# Image Focus
+
+In Storyblok, you can set a focus point in a image.
+In most cases, this point can be used to better position the image in a container.
+
+To use it, you get `focus` in your normalized image object.
+This property is build up like this: `<left>x<top> <left>x<top>`.
+Example: `1826x232:1827x233`
+
+With this, you can calculate a value for `object-position`.
+Theoretically, the first two numbers are enough. So you can extract it and then you can calculate your `object-position` value:
+
+```typescript
+`${(focus.left / image.src.width) * 100}% ${(focus.top / image.src.height) * 100}%`
+```
+
+## Full example of a focus calculation for object-position
+
+```typescript
+// for this example, we have here only the important properties
+interface StoryblokImage
+{
+	focus?: string|null;
+	src: {
+		width: number;
+		height: number;
+	};
+}
+
+/**
+ * calculate the object-position value
+ */
+export function parseObjectPositionFromFocus (image: StoryblokImage) : string|undefined
+{
+	if (!image.focus)
+	{
+		return undefined;
+	}
+
+	const splittedFocus = /^(?<left>\d*)x(?<top>\d*):(?<left2>\d*)x(?<top2>\d*)$/.exec(image.focus);
+
+	if (!splittedFocus || !splittedFocus.groups)
+	{
+		return undefined;
+	}
+
+	const groups = splittedFocus.groups;
+
+	return `${(groups.left / image.src.width) * 100}% ${(groups.top / image.src.height) * 100}%`;
+}
+```

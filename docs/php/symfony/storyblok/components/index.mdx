@@ -1,0 +1,216 @@
+---
+sidebar_position: 10
+---
+
+# Components
+
+Storyblok works and looks like a virtual filesystem. You can have folders and documents inside of them.
+Components define the structure of the content of these documents and are the building block of content in Storyblok.
+
+
+:::tip
+This article talks about a lot of different classes. Take a look at the [recommended directory structure](recommended-directory-structure) before diving into the specifics.
+:::
+
+
+## Component Types
+
+Every component in Storyblok is either
+
+- a **standalone component**. These are components that can be added to the folders as documents.
+- a **nested component**. These are components that can only act as nested content in other documents, but not be added to a folder directly.
+- a **universal component**. These are components that can be added both directly to folders, but also nested into other components. These are practically never used.
+
+
+## Naming Convention
+
+Standalone components are named **documents**. They often have no suffix in their class name.
+
+Nested components can have multiple naming schemas, depending on their usage. Normally they also have a class name suffix.
+
+- `*Block` for blocks
+- `*Widget` for small and universally used elements like `LinkWidget` (with link and label).
+- `*Item` / `*Entry` used for slider entries.
+
+
+:::info
+To ease the reading of this guide, it will keep referring to **documents** (= standalone components) and **bloks** (= nested components) from now on.
+:::
+
+## Defining Components
+
+The first step to having components in Storyblok is to define the structure of them. You start by extending `AbstractComponent`:
+
+```php
+use Torr\Storyblok\Component\AbstractComponent;
+use Torr\Storyblok\Component\Config\ComponentType;
+use Torr\Storyblok\Field\Definition\LinkField;
+use Torr\Storyblok\Field\Definition\TextField;
+
+final class ButtonComponent extends AbstractComponent
+{
+	/**
+	 * A unique key to identify this component. It is used in Storyblok as well,
+	 * so it needs to be unique there too, if you have components
+	 * not managed by this bundle.
+	 */
+	public static function getKey () : string
+	{
+		return "button";
+	}
+
+	/**
+	 * Configures the structure for the component
+	 */
+	protected function configureFields () : array
+	{
+		return [
+			"label" => (new TextField("Label"))
+				->enableValidation(),
+			"link" => (new LinkField(
+				"Link",
+				allowEmailLinks: false,
+				allowAssetLinks: false,
+				allowAnchors: true,
+			)),
+		];
+	}
+
+	/**
+	 * Returns whether this component is standalone / nested / universal.
+	 */
+	protected function getComponentType () : ComponentType
+	{
+		return ComponentType::Nested;
+	}
+
+	/**
+	 * Defines the label that is shown in Storybloks UI.
+	 */
+	public function getDisplayName () : string
+	{
+		return "Button";
+	}
+}
+```
+
+This is the basic structure of a component. You need to define a unique key, a label for Storybloks UI, the type and the fields.
+That's it, you are ready to use this component in Storyblok, [after you synced it](../cli).
+
+See the [fields docs](fields) for an overview over all available fields.
+
+
+### Additional Settings
+
+Besides of the required methods, you can override default settings, to customize your component.
+
+#### `configureComponent()`
+
+Customize the component definition. Let's you define the preview in the component selector, a custom icon or the background color.
+
+
+#### `getComponentGroup()`
+
+Returns the component group. You should define a project-wide backed enum that defines all your available component groups and return it.
+
+:::caution
+This should only be used to improve the readability in the component admin in Storyblok.
+For everything feature related, you should always use component tags instead.
+:::
+
+
+#### `getTags()`
+
+Returns the tags of this component. See the [tags docs](tags) for details.
+
+
+#### `getStoryClass()`
+
+If the component is a document, and you want to fetch it via the API, you need to create a story for it.
+See below for details.
+
+
+## Fetching Stories
+
+Documents can be fetched as separate entries via the API, while bloks can't – they are only embedded in other components.
+
+When loading content from Storyblok, the data from Storyblok is validated and parsed according to the structure defined in the component definition.
+If the data is valid, it will create a `Story` object to be used in the rest of the app.
+
+:::note
+The process of validating the data, creating the story and passing the data in, is called **hydration**.
+:::
+
+So for every document (that you want to fetch via the API), you need to create a story class.
+The simplest possible story class looks like that:
+
+
+```php
+use Torr\Storyblok\Story\Story;
+
+class PageStory extends Story
+{
+}
+```
+
+You need to tell the library which story your component uses, by configuring it in the component:
+
+```php
+use Torr\Storyblok\Component\AbstractComponent;
+
+class PageComponent extends AbstractComponent
+{
+	// ...
+
+	public function getStoryClass () : ?string
+	{
+		return PageStory::class;
+	}
+}
+```
+
+Right now, the only place that knows the data for the structure of the data that is coming from Storyblok
+is the component. The rest of the app should not need to know the structure inside `data` array.
+So the Story can provide typed convenience wrappers for the data:
+
+
+```php
+class PageStory extends Story
+{
+	public function getTitle () : string
+	{
+		return $this->data["title"];
+	}
+}
+```
+
+In this case, we know that there must be a field called `title`, it is a text and is not optional.
+
+:::tip
+By creating story objects, the rest of the app can interact with properly documented and type value objects, instead of an opaque array.
+:::
+
+
+### Transforming Nested Data
+
+You can either directly access the entry in the `data` array as described above, but some of the fields need a transformation of the
+data.
+
+:::info
+Some of the field types wrap the array structure from Storyblok in value objects or clean up the data.
+:::
+
+You can be safe by always transforming the value of the data entries:
+
+
+```php
+class PageStory extends Story
+{
+	public function getContent () : array
+	{
+		return $this->getTransformedFieldData("content");
+		//                                     ↑↑↑↑↑↑↑
+		// The argument to this function is the key in the data array.
+	}
+}
+```

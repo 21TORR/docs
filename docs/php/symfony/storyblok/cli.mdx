@@ -1,0 +1,35 @@
+---
+sidebar_position: 20
+---
+
+# CLI
+
+To integrate your local definitions with Storyblok, you need to push your config to their API.
+There are ready-to-use commands for that.
+
+Call the command via:
+
+```bash
+bin/console storyblok:*
+```
+
+## `storyblok:components:overview`
+
+Renders an overview of all locally registered components, their names and components + stories.
+
+It also renders a list of all components configured in Storyblok that don't match a local definition.
+
+:::tip
+If you have manually managed components in Storyblok, you can ignore them in this overview.
+
+However, renamed components are not automatically removed in Storyblok, so this command is great to see if there is something to clean up.
+:::
+
+
+## `storyblok:definitions:sync`
+
+Pushes your local component definitions to Storyblok.
+
+By default, you are asked to confirm to sync the structure.
+
+You can pass `--force` to automatically confirm the command. This can be used to automate your deployment.

@@ -1,0 +1,71 @@
+---
+sidebar_position: 20
+---
+
+# Tags
+
+When using `BlokField`s or `LinkField`s, you regularly want to restrict the selection of the components / stories to sepcific types.
+
+While Storyblok allows to use the component groups for that, they are heavily limited: every component can only
+by added to a single group.
+
+That is the reason this bundle adds another layer: **tags**.
+
+
+## ComponentTag
+
+It is **heavily recommended** to add a single project-wide `ComponentTag` enum to use for defining component tags.
+
+As these tags are only used inside your app, Storyblok knows nothing of them. The bundle transforms all tags to a list of
+component keys before interacting with the API. This list is automatically deduplicated.
+
+
+```php
+enum ComponentTag : string
+{
+	case AccordionBlock = "accordion";
+	case BLOCK = "block";
+	case SomeOtherTag = "some-other-tag";
+}
+```
+
+The enum needs to be backed. The actual values don't matter, they only need to be unique.
+
+
+
+## Component Filter
+
+Every component can have multiple tags (or none), by implementing the `getTags()` method:
+
+```php
+class ExampleComponent extends AbstractComponent
+{
+	public function getTags () : array
+	{
+		return [
+			ComponentTag::Block,
+			ComponentTag::AccordionBlock,
+			ComponentTag::SomeOtherTag,
+		];
+	}
+}
+```
+
+Then, when implementing for example a `BloksField`, you can filter the components for this tag:
+
+```php
+use Torr\Storyblok\Field\Definition\BloksField;
+
+protected function configureFields () : array
+{
+	return [
+		"content" => new BloksField(
+			"Content",
+			allowedComponents: ComponentFilter::tags(ComponentTag::Block, ComponentTag::Test),
+		),
+	];
+}
+```
+
+You can either use the static helper `::tags()` or `::keys()` to pass tags / component keys exclusively.
+If you need to pass a combination, manually pass them in the constructor.
