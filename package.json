@@ -11,30 +11,30 @@
 		"write-translations": "docusaurus write-translations"
 	},
 	"dependencies": {
-		"@docusaurus/core": "2.4.3",
-		"@docusaurus/preset-classic": "2.4.3",
-		"@docusaurus/theme-classic": "^2.4.3",
-		"@mdx-js/react": "^1.6.22",
-		"clsx": "^1.2.1",
+		"@docusaurus/core": "^3.0.0",
+		"@docusaurus/preset-classic": "^3.0.0",
+		"@docusaurus/theme-classic": "^3.0.0",
+		"@mdx-js/react": "^3.0.0",
+		"clsx": "^2.0.0",
 		"prism-react-renderer": "^2.1.0",
 		"prismjs": "^1.29.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
-		"@docusaurus/module-type-aliases": "2.4.3",
-		"@docusaurus/types": "^2.4.3",
-		"@tsconfig/docusaurus": "^1.0.7",
-		"@types/node": "^20.7.0",
-		"@types/react": "^18.2.23",
-		"@types/react-dom": "^18.2.7",
+		"@docusaurus/module-type-aliases": "3.0.0",
+		"@docusaurus/types": "^3.0.0",
+		"@tsconfig/docusaurus": "^2.0.2",
+		"@types/node": "^20.8.10",
+		"@types/react": "^18.2.36",
+		"@types/react-dom": "^18.2.14",
 		"docusaurus-plugin-sass": "^0.2.5",
 		"prettier-package-json": "^2.8.0",
-		"sass": "^1.68.0",
+		"sass": "^1.69.5",
 		"sass-loader": "^13.3.2",
 		"ts-dedent": "^2.2.0",
 		"typescript": "^5.2.2",
-		"typescript-plugin-css-modules": "^5.0.1"
+		"typescript-plugin-css-modules": "^5.0.2"
 	},
 	"engines": {
 		"node": ">= 20"

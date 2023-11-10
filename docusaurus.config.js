@@ -149,7 +149,6 @@ const config = {
 				additionalLanguages: [
 					"php",
 					"twig",
-					"yaml",
 				],
 			},
 		}),
