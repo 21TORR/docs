@@ -1,0 +1,28 @@
+# Translations
+
+While you can manage all translations in Storyblok directly, it is quite common to use an external translation agency, that works with XLIFF files.
+
+In Storyblok you need to install the [Export Translatable Fields] and [Import Translatable Fields] to get these files out of Storyblok.
+
+For certain field types, you can decide on whether these fields should be included in these exports. You can specify this setting (if supported on the field type) by setting the `$exportTranslation` constructor argument.
+
+
+## Components
+
+| Component | Include in translation export                      |
+|-----------|----------------------------------------------------|
+| Asset     | ❌                                                  |
+| Bloks     | ✅ (no own fields, included bloks are translatable) |
+| Boolean   | ❌                                                  |
+| Choice    | ❌                                                  |
+| DateTime  | ❌                                                  |
+| Link      | ❌                                                  |
+| Markdown  | ✅ (configurable)                                   |
+| Number    | ❌ (configurable)                                   |
+| RichText  | ✅                                                  |
+| Table     | ❌                                                  |
+| Text      | ✅ (configurable)                                   |
+
+
+[Export Translatable Fields]: https://www.storyblok.com/apps/export
+[Import Translatable Fields]: https://www.storyblok.com/apps/import
