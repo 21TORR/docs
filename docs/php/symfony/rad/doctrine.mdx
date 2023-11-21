@@ -1,0 +1,20 @@
+# Doctrine
+
+
+## Change Checker
+
+The `DoctrineChangeChecker` heuristically checks the current `UnitOfWork` whether any entity updates are scheduled, that are not just `timeModified` updates.
+
+If only time modified updates are scheduled, you can decide to skip the next update steps, like deployments:
+
+```php
+use Torr\Rad\Doctrine\DoctrineChangeChecker;
+
+function test (DoctrineChangeChecker $changeChecker)
+{
+	if ($changeChecker->hasContentChanged())
+	{
+		$this->triggerDeployment();
+	}
+}
+```
