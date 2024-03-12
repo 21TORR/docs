@@ -1,0 +1,23 @@
+# Anchor Integration
+
+The anchor integration is a helper to fix weird anchor (URL fragment) positioning issues in React pages.
+
+The main issue is that there is a race condition between the positioning of the browser window and React rendering. If React is finished rendering before the browser is trying to position to window to the anchor, everything is fine: the window will end up at the right place.
+
+However, if the viewport is positioned before React is finished rendering, the temporary position of the anchored element might shift (e.g. because above the element a large container is rendered and pushes the following content down).
+
+There is no proper fix, as we can't tell the browser to wait with the positioning.
+
+This element circumvents the issue, by waiting after the initial render (and then 250ms by default) to reposition the viewport explicitly once again.
+
+## Usage
+
+You should load this component once in your app. If you are using Next.js, a (fairly top-level) layout would be the correct place for it.
+
+```tsx
+import {AnchorIntegration} from "@21torr/dune/next/components/Structure/AnchorIntegration.js";
+
+<AnchorIntegration />
+```
+
+By default, the component waits 250ms after the initial render, you can adjust this value by explicitly passing the `timeout` prop.
