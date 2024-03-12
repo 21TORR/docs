@@ -1,8 +1,6 @@
 name: CI
 
 on:
-    workflow_call:
-    workflow_dispatch:
     pull_request:
         branches:
             - '**'
@@ -14,13 +12,13 @@ jobs:
 
         steps:
             -   name: Checkout Code
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
-            -   uses: actions/setup-node@v3
+            -   uses: actions/setup-node@v4
                 with:
                     node-version: 20
 
-            -   uses: pnpm/action-setup@v2
+            -   uses: pnpm/action-setup@v3
                 with:
                     version: 'latest'
                     run_install: true
@@ -29,8 +27,3 @@ jobs:
                 run: ./node_modules/.bin/prettier-package-json --use-tabs --list-different
 
             -   run: pnpm build
-
-            -   uses: actions/upload-artifact@v3
-                with:
-                    name: build
-                    path: build/
