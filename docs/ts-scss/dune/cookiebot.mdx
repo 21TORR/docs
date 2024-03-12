@@ -1,0 +1,30 @@
+# Cookiebot
+
+There is a component for loading Cookiebot:
+
+```tsx
+import {Cookiebot} from "@21torr/dune/next/components/Snippet/Cookiebot.js";
+
+<Cookiebot id="..." />
+```
+
+There also is a hook to be able to interact with Cookiebot inside of pages:
+
+```tsx
+import {useCookiebot} from "@21torr/dune/react/hooks/cookiebot.js";
+
+const cookiebot = useCookiebot();
+
+// check consent levels
+console.log(true === cookiebot.consent.marketing);
+console.log(true === cookiebot.consent.preferences);
+console.log(true === cookiebot.consent.statistics);
+
+// or open the consent manager
+<button
+	type="button"
+	onClick={() => cookiebot.openConsentManager()}
+>
+	Open Consent Manager
+</button>
+```
