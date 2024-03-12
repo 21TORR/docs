@@ -1,0 +1,15 @@
+# Client Only Portal
+
+The ClientOnlyPortal is a React portal, that is only rendered on the client.
+On the server it will render to `null`.
+
+```tsx
+import {ClientOnlyPortal} from "@21torr/dune/react/components/Structure/ClientOnlyPortal.js";
+
+<ClientOnlyPortal>
+	<div>My content</div>
+</ClientOnlyPortal>
+```
+
+You can pass an explicit `container` prop, to specify in which element the portal should point to.
+By default, the `<body>` is used.
