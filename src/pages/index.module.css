@@ -4,7 +4,7 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 8rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -12,12 +12,31 @@
 
 @media screen and (max-width: 996px) {
   .heroBanner {
-    padding: 2rem;
+    padding: 4rem 1rem;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: none transparent center / cover no-repeat;
+}
+
+.heroBackground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.2;
+}
+
+:global([data-theme="dark"]) .heroBackground::after {
+  background: #fff;
+  opacity: 0.3;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
 }

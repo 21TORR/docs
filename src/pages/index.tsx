@@ -1,11 +1,13 @@
+import styles from './index.module.css';
+
+import headerImage from "@site/static/img/header.jpg";
+
 import React from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
-import styles from './index.module.css';
 
 function HomepageHeader ()
 {
@@ -13,7 +15,13 @@ function HomepageHeader ()
 
 	return (
 		<header className={clsx('hero hero--primary', styles.heroBanner)}>
-			<div className="container">
+			<div
+				className={styles.heroBackground}
+				style={{
+					backgroundImage: `url(${headerImage})`,
+				}}
+			/>
+			<div className={`container ${styles.heroContent}`}>
 				<h1 className="hero__title">{siteConfig.title}</h1>
 				<p className="hero__subtitle">{siteConfig.tagline}</p>
 			</div>
