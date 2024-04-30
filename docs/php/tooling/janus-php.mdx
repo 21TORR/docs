@@ -76,9 +76,9 @@ Your CI should just use the composer scripts:
 ```yaml title=".gitlab-ci.yml"
 "Build App":
     script:
-        - composer install --optimize-autoloader --classmap-authoritative --no-interaction
-        - composer run-script lint
-        - composer run-script test
+        - "composer install --optimize-autoloader --classmap-authoritative --no-interaction"
+        - "composer run-script lint"
+        - "composer run-script test"
 ```
 
 
