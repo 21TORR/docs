@@ -1,53 +1,54 @@
-import React, {ReactElement} from 'react';
-import clsx from 'clsx';
 import styles from './styles.module.css';
-import MountainImage from "@site/static/img/undraw_docusaurus_mountain.svg";
-import TreeImage from "@site/static/img/undraw_docusaurus_tree.svg";
-import ReactImage from "@site/static/img/undraw_docusaurus_react.svg";
+
+import joinImage from "@site/static/img/home-join.jpg";
+import helpImage from "@site/static/img/home-help.jpg";
+import placeImage from "@site/static/img/home-place.jpg";
+
+import React, {type ReactNode} from "react";
+import clsx from 'clsx';
+import Link from "@docusaurus/Link";
+
 
 type FeatureItem = {
   title: string;
-  svg: ReactElement;
-  description: JSX.Element;
+  image: ReactNode;
+  description: ReactNode;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    svg: <MountainImage className={styles.featureSvg} role="img" />,
+    title: 'All in one place',
+    image: <img src={placeImage} alt="Photo from coffee house in Jakarta, Indonesia" />,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        This website contains all documentation for all of our open-source tools.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    svg: <TreeImage className={styles.featureSvg} role="img" />,
+    title: 'Help appreciated',
+    image: <img src={helpImage} alt="Photo of a building during construction" />,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+          The docs can be edited by everyone. Feel welcome to write docs or create issues about missing / unclear topics in the <Link href="https://github.com/21TORR/docs">repository</Link>.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    svg: <ReactImage className={styles.featureSvg} role="img" />,
+    title: 'Work with us',
+    image: <img src={joinImage} alt="Photo from Stuttgart, Germany" />,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+          You like our components? Come <Link href="https://www.21torr.com/career">join our team</Link> and work with us to make them even better.
       </>
     ),
   },
 ];
 
-function Feature({title, svg, description}: FeatureItem) {
+function Feature({title, image, description}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">{svg}</div>
+      <div className={`text--center ${styles.featureImage}`}>{image}</div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>

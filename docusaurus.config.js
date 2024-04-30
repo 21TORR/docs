@@ -135,7 +135,7 @@ const config = {
 						title: '21TORR',
 						items: [
 							{
-								label: 'Work with us',
+								label: 'Join our team',
 								href: 'https://www.21torr.com/career',
 							},
 							{
