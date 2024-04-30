@@ -1,0 +1,85 @@
+import {LinkList} from "../../../../src/components/Link/LinkList";
+
+# Janus PHP
+
+<LinkList
+	github="https://github.com/21TORR/janus-php"
+	packagist="https://packagist.org/packages/21torr/janus"
+/>
+
+Janus is a library to provide the config for our CI / code style tools.
+
+We use the following tools:
+
+- [PHPStan]
+- [PHP CS Fixer]
+- [Composer Normalize]
+
+The philosophy of this library is like this:
+
+1. put reusable config into the library
+2. place all config files in the root of the project, but reference the reusable config files from the library
+
+This has the following advantages: every developer and tool detects that we use these tools, but we have a reusable config that can be automatically update with a `composer update`.
+
+All tools are installed and used with the [Composer bin plugin], so that the dependencies don't interfere with your application.
+
+:::tip
+If you want to use PHPUnit, please make sure the read [the note about it].
+:::
+
+
+## Installation
+
+Install the library with:
+
+```shell
+composer req --dev 21torr/janus
+```
+
+
+## Integration
+
+To place the import files into the project, the library provides a helper that just copies the files to the repository and updates the `composer.json`. So make sure that your Git is clean before running this command. After updating, you can diff and integrate the changes with git.
+
+You have several options:
+
+```shell
+# Initialize in a symfony application
+./vendor/bin/janus init-symfony
+
+# Initialize in a library
+./vendor/bin/janus init-library
+```
+
+
+### Usage
+
+Janus also adds `scripts` to your `composer.json` that you then run with composer:
+
+
+```shell
+# Fixes lint issues
+composer run-script fix-lint
+
+# Runs linting, use in your CI
+composer run-script lint
+
+# Runs tests, use in your CI
+composer run-script test
+```
+
+
+
+## PHP CS Fixer
+
+We use our own [PHP-CS-Fixer] package, as it adds custom configuration for our usage.
+
+
+
+[Composer bin plugin]: /docs/php/tooling#composer-bin-plugin
+[Composer Normalize]: https://github.com/ergebnis/composer-normalize
+[PHP CS Fixer]: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+[PHP-CS-Fixer]: /docs/php/tooling/php-cs-fixer
+[PHPStan]: https://phpstan.org/
+[the note about it]: /docs/php/tooling#phpunit

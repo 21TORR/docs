@@ -3,3 +3,53 @@ sidebar_position: 3
 ---
 
 # Tooling
+
+## Composer bin Plugin
+
+For all of our tooling we use the [Composer bin plugin], to avoid that the dependencies of your tools don't interfere with your application.
+
+Install the library as a dev dependency:
+
+```shell
+composer req --dev bamarni/composer-bin-plugin
+```
+
+Then enable the tool in your `composer.json`:
+
+```json
+{
+	"extra": {
+		"bamarni-bin": {
+			"bin-links": false,
+			"forward-command": true
+		}
+	}
+}
+```
+
+You should ignore the nested vendor directories in your `.gitignore` and the `composer.lock`:
+
+```gitignore
+/vendor-bin/*/composer.lock
+/vendor-bin/*/vendor
+```
+
+:::best-practice
+Ignoring the `composer.lock` has the advantage, that the CI will always install the latest versions -> you will never have outdated code style & linting results.
+:::
+
+
+## PHPUnit
+
+If you need to use PHPUnit, you should use the [PHPUnit bridge from Symfony], so that the dependencies of PHPUnit (which have a large overlap with a common Symfony application) don't interfere with your project.
+
+Run your tests with:
+
+```shell
+./vendor/bin/simple-phpunit
+```
+
+
+
+[Composer bin plugin]: https://github.com/bamarni/composer-bin-plugin
+[PHPUnit bridge from Symfony]: https://symfony.com/doc/current/components/phpunit_bridge.html

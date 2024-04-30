@@ -33,10 +33,18 @@ const config = {
 				docs: {
 					sidebarPath: require.resolve('./sidebars.js'),
 					editUrl: 'https://github.com/21TORR/docs/tree/live/',
+					admonitions: {
+						keywords: ['best-practice'],
+						extendDefaults: true,
+					},
 				},
 				blog: {
 					showReadingTime: true,
 					editUrl: 'https://github.com/21TORR/docs/tree/live/',
+					admonitions: {
+						keywords: ['best-practice'],
+						extendDefaults: true,
+					},
 				},
 				theme: {
 					customCss: require.resolve('./assets/scss/custom.scss'),
@@ -167,6 +175,11 @@ const config = {
 				theme: themes.github,
 				darkTheme: themes.vsDark,
 				additionalLanguages: [
+					"bash",
+					"diff",
+					"ini",
+					"json",
+					"json5",
 					"php",
 					"twig",
 				],
