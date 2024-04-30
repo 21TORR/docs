@@ -5,15 +5,15 @@
 	width: 100%;
 }
 
-.featureImage {
+.featureImageContainer {
 	height: auto;
 	max-width: 300px;
 	width: 100%;
 	display: block;
 	margin-inline: auto;
 	margin-bottom: 8px;
+}
 
-	img {
-		border-radius: 10px;
-	}
+.featureImage {
+	border-radius: 10px;
 }
