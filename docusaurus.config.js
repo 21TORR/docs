@@ -90,7 +90,7 @@ const config = {
 				style: 'dark',
 				links: [
 					{
-						title: 'Docs',
+						title: 'Topics',
 						items: [
 							{
 								label: 'PHP',
@@ -111,8 +111,33 @@ const config = {
 						],
 					},
 					{
+						title: 'Quick Access',
+						items: [
+							{
+								label: 'RAD Bundle',
+								href: '/docs/php/symfony/rad/',
+							},
+							{
+								label: 'Storyblok Bundle',
+								href: '/docs/php/symfony/storyblok/',
+							},
+							{
+								label: 'Dune',
+								href: '/docs/ts-scss/dune/',
+							},
+							{
+								label: 'Help these docs',
+								href: 'https://github.com/21TORR/docs',
+							},
+						],
+					},
+					{
 						title: '21TORR',
 						items: [
+							{
+								label: 'Join our team',
+								href: 'https://www.21torr.com/career',
+							},
 							{
 								label: 'Our website',
 								href: 'https://www.21torr.com',
@@ -121,11 +146,6 @@ const config = {
 								label: 'Github',
 								href: 'https://github.com/21TORR',
 							},
-						],
-					},
-					{
-						title: 'Social',
-						items: [
 							{
 								label: 'Instagram',
 								href: 'https://www.instagram.com/21torr/',
