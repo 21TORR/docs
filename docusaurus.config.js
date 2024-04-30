@@ -182,6 +182,7 @@ const config = {
 					"json5",
 					"php",
 					"twig",
+					"yaml",
 				],
 			},
 		}),
