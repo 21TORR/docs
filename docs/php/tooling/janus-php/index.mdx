@@ -1,6 +1,13 @@
+import {LinkList} from "../../../../src/components/Link/LinkList";
+
 # Janus PHP
 
-Janus is a library, to contains the config for our CI tools.
+<LinkList
+	github="https://github.com/21TORR/janus-php"
+	packagist="https://packagist.org/packages/21torr/janus"
+/>
+
+Janus is a library to provide the config for our CI / code style tools.
 
 We use the following tools:
 
@@ -16,6 +23,10 @@ The philosophy of this library is like this:
 This has the following advantages: every developer and tool detects that we use these tools, but we have a reusable config that can be automatically update with a `composer update`.
 
 All tools are installed and used with the [Composer bin plugin], so that the dependencies don't interfere with your application.
+
+:::tip
+If you want to use PHPUnit, please make sure the read [the note about it].
+:::
 
 
 ## Installation
@@ -59,21 +70,16 @@ composer run-script test
 ```
 
 
-## PHPUnit
-
-If you need to use PHPUnit, you should use the [PHPUnit bridge from Symfony], so that the dependencies of PHPUnit (which have a large overlap with a common Symfony application) don't interfere with your project.
-
-
 
 ## PHP CS Fixer
 
-We use our own [`21torr/php-cs-fixer`] package, as it adds custom configuration for our usage.
+We use our own [PHP-CS-Fixer] package, as it adds custom configuration for our usage.
 
 
 
-[`21torr/php-cs-fixer`]: https://github.com/21TORR/php-cs-fixer
-[Composer bin plugin]: https://github.com/bamarni/composer-bin-plugin
+[Composer bin plugin]: /docs/php/tooling#composer-bin-plugin
 [Composer Normalize]: https://github.com/ergebnis/composer-normalize
 [PHP CS Fixer]: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+[PHP-CS-Fixer]: /docs/php/tooling/php-cs-fixer
 [PHPStan]: https://phpstan.org/
-[PHPUnit bridge from Symfony]: https://symfony.com/doc/current/components/phpunit_bridge.html
+[the note about it]: /docs/php/tooling#phpunit
