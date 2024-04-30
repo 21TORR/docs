@@ -1,0 +1,79 @@
+# Janus PHP
+
+Janus is a library, to contains the config for our CI tools.
+
+We use the following tools:
+
+- [PHPStan]
+- [PHP CS Fixer]
+- [Composer Normalize]
+
+The philosophy of this library is like this:
+
+1. put reusable config into the library
+2. place all config files in the root of the project, but reference the reusable config files from the library
+
+This has the following advantages: every developer and tool detects that we use these tools, but we have a reusable config that can be automatically update with a `composer update`.
+
+All tools are installed and used with the [Composer bin plugin], so that the dependencies don't interfere with your application.
+
+
+## Installation
+
+Install the library with:
+
+```shell
+composer req --dev 21torr/janus
+```
+
+
+## Integration
+
+To place the import files into the project, the library provides a helper that just copies the files to the repository and updates the `composer.json`. So make sure that your Git is clean before running this command. After updating, you can diff and integrate the changes with git.
+
+You have several options:
+
+```shell
+# Initialize in a symfony application
+./vendor/bin/janus init-symfony
+
+# Initialize in a library
+./vendor/bin/janus init-library
+```
+
+
+### Usage
+
+Janus also adds `scripts` to your `composer.json` that you then run with composer:
+
+
+```shell
+# Fixes lint issues
+composer run-script fix-lint
+
+# Runs linting, use in your CI
+composer run-script lint
+
+# Runs tests, use in your CI
+composer run-script test
+```
+
+
+## PHPUnit
+
+If you need to use PHPUnit, you should use the [PHPUnit bridge from Symfony], so that the dependencies of PHPUnit (which have a large overlap with a common Symfony application) don't interfere with your project.
+
+
+
+## PHP CS Fixer
+
+We use our own [`21torr/php-cs-fixer`] package, as it adds custom configuration for our usage.
+
+
+
+[`21torr/php-cs-fixer`]: https://github.com/21TORR/php-cs-fixer
+[Composer bin plugin]: https://github.com/bamarni/composer-bin-plugin
+[Composer Normalize]: https://github.com/ergebnis/composer-normalize
+[PHP CS Fixer]: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+[PHPStan]: https://phpstan.org/
+[PHPUnit bridge from Symfony]: https://symfony.com/doc/current/components/phpunit_bridge.html
