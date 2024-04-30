@@ -167,6 +167,11 @@ const config = {
 				theme: themes.github,
 				darkTheme: themes.vsDark,
 				additionalLanguages: [
+					"bash",
+					"diff",
+					"ini",
+					"json",
+					"json5",
 					"php",
 					"twig",
 				],
