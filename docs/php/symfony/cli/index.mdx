@@ -7,6 +7,83 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/cli"
 />
 
-:::caution
-The docs still need to be written.
+The CLI bundle provides two main features: a customized wrapper for stylized console output, as well as some a helper class for long running tasks.
+
+
+## Installation
+
+```shell
+composer require 21torr/cli
+```
+
+
+## Usage
+
+### Stylized Console Output
+
+The console helper extends [Symfonys SymfonyStyle] helper.
+
+
+```php
+use Torr\Cli\Console\Style\TorrStyle;
+
+class MyCommand extends Command
+{
+    // ...
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $io = new TorrStyle($input, $output);
+        // ...
+    }
+}
+```
+
+The main changes include:
+
+- customized title
+- customized section headlines
+- customized table style
+- customized listing style
+- progress bars automatically have the `%message%` parameter
+
+Any progress bar uses a very verbose format including `%message%` by default. That means you should always provide a title:
+
+```php
+$items = [/* ... */];
+$progressBar = $io->createProgressBar(count($items));
+
+foreach ($items as $item)
+{
+	// first set title, then advance
+	$progressBar->setMessage($item->getTitle());
+	$progressBar->advance();
+
+	// then do your actual work
+}
+
+$progressBar->finish();
+$io->newline(2);
+```
+
+:::tip
+As the progress bar doesn't add a newline at the end by default, you should always add 1 or 2 when finishing a progress bar.
 :::
+
+
+### Command Helper
+
+The command helper has convenience wrappers for long running tasks:
+
+- `->startLongRunningCommand()` to disable the profiler and remove time and memory limits
+- `->disableProfiler()` to only disable the profiler
+
+It's a regular service, so you can just let it get injected into your service.
+
+:::best-practice
+Try to avoid using long-running CLI tasks, use the [Symfony messenger] for these tasks instead.
+:::
+
+
+[Symfony messenger]: https://symfony.com/doc/current/messenger.html
+[Symfonys SymfonyStyle]: https://symfony.com/doc/current/console/style.html#basic-usage
