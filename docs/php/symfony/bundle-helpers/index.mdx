@@ -7,6 +7,85 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/bundle-helpers"
 />
 
-:::caution
-The docs still need to be written.
+The bundle helpers bundle contains several wrapper classes, that eases the integration of your bundle into Symfony.
+
+Instead of needing to manually writing an extension class, you can inline it in your bundle.
+
+
+## Installation
+
+```shell
+composer require 21torr/bundle-helpers
+```
+
+
+## Usage
+
+There are two helpers for your bundle:
+
+- `BundleExtension` for when your bundle doesn't have configuration
+- `ConfigurableBundleExtension` when it does
+
+
+You it in your `Bundle::getContainerExtension()` method:
+
+```php
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Torr\BundleHelpers\Bundle\BundleExtension;
+
+class MyBundle extends Bundle
+{
+	/**
+	 * @inheritDoc
+	 */
+	public function getContainerExtension () : ExtensionInterface
+	{
+		return new BundleExtension($this);
+	}
+}
+```
+
+The extension automatically
+
+- loads `config/services.yaml` in your bundle, if it exists
+- deducts the bundle alias from your class name (without "Bundle" suffix and without the namespace before).
+
+
+:::tip
+You can customize the auto-generated bundle alias by explicitly passing the `$alias` parameter to the constructor.
 :::
+
+
+### Configurable Extension
+
+When your bundle needs configuration, you first create the regular configuration class for your bundle, [like in any other Symfony bundle].
+
+You can then use that configuration directly by passing a closure:
+
+```php
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Torr\BundleHelpers\Bundle\ConfigurableBundleExtension;
+
+class MyBundle extends Bundle
+{
+	/**
+	 * @inheritDoc
+	 */
+	public function getContainerExtension () : ExtensionInterface
+	{
+		return new ConfigurableBundleExtension(
+			$this,
+			new MyBundleConfiguration(), // this is your custom configuration class
+			static function (array $config, ContainerBuilder $container) : void
+			{
+				// $config is your already parsed config and you can
+				// map it to container classes.
+			},
+			}
+		);
+	}
+}
+```
+
+
+[like in any other Symfony bundle]: https://symfony.com/doc/current/bundles/configuration.html
