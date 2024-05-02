@@ -7,7 +7,14 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/hosting"
 />
 
-## Installation
+The hosting bundle is a small bundle, that includes several fundamental tasks, that every project needs.
+
+
+## Add required configuration
+
+:::tip
+This config is automatically generated when using Symfony Flex.
+:::
 
 Create the env var in your `.env`:
 
@@ -24,8 +31,124 @@ hosting:
     tier: '%env(HOSTING_TIER)%'
 ```
 
-Then install the package:
+
+## Installation
 
 ```shell
 composer require 21torr/hosting
 ```
+
+
+## Setup
+
+The bundle contains two CLI tasks, that you should integrate into your workflow:
+
+```shell
+# This command should be run once after your build finished:
+bin/console hosting:run-tasks:post-build
+
+# This command should be run once after your deployment finished:
+bin/console hosting:run-tasks:post-deploy
+```
+
+
+## Features
+
+### Hosting Tier
+
+You can define three hosting tiers:
+
+- `development` (probably your local machine)
+- `staging`
+- `production`
+
+Using the `HostingTier` service, you can define tasks that should only run on certain environments:
+
+```php
+function syncToExternalSystem ()
+{
+	if (!$this->hostingTier->isProduction())
+	{
+		throw new Error("Syncing to external system is only allowed in production");
+	}
+
+	// ...
+}
+```
+
+### Installation Key
+
+The installation key can be embedded as HTML comment in your output, to be able to match this unique key when doing uptime checks. This ensures, that the correct page / system is reachable on a given URL.
+
+
+### Build Info
+
+You can also embed important build parameters into a static build info, that the running app can then show as info to an admin.
+
+You can add custom build info by hooking into the `CollectBuildInfoEvent` event.
+
+```php
+class CollectBuildInfoEventListener
+{
+	#[AsEventListener(CollectBuildInfoEvent::class)]
+	public function onCollectBuildInfo (CollectBuildInfoEvent $event) : void
+	{
+		$event->set("app.test", "123");
+	}
+}
+```
+
+The info is written as JSON file to `.build-info.json` in your project directory and is supposed to be deployed to the production environment.
+
+You can then fetch the build info during runtime using `BuildInfoStorage::getBuildInfo()`.
+
+There are automatic build info integrations for the following info:
+
+- `built` a timestamp of when the app was built
+- `git.last-tag` the latest git tag in the current branch[^1]
+- `git.commit` the HEAD commit hash[^1]
+
+
+
+
+
+### Tasks
+
+This bundle provides infrastructure for your app to run one-time tasks after build or deployment.
+
+These are called using the console commands:
+
+```shell
+bin/console hosting:run-tasks:post-build
+bin/console hosting:run-tasks:post-deploy
+```
+
+You can integrate into them by implementing the `PostBuildTaskInterface` or `PostDeploymentTaskInterface` interfaces respectively. Use autoconfiguration, then everything works out-of-the-box.
+
+Every task has basically a label and a callback that can perform certain tasks:
+
+```php
+use Torr\Hosting\Deployment\PostBuildTaskInterface;
+
+class MyBuildTask implements PostBuildTaskInterface
+{
+	/**
+	 * @inheritDoc
+	 */
+	public function getLabel () : string
+	{
+		return "My Task";
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function runPostBuild (TaskCli $io) : void
+	{
+		// perform your tasks here
+	}
+}
+```
+
+
+[^1]: Only available if the git executable and a repository is found.
