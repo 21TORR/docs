@@ -7,9 +7,6 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/task-manager"
 />
 
-:::caution
-The docs still need to be written.
-:::
 
 ## Installation
 
@@ -31,3 +28,57 @@ task_manager:
 ```
 
 While this bundle auto-detects all queue names, you should define them manually in your config, as otherwise the priority between these queues might be wrong.
+
+
+## Registering new Tasks
+
+The bundle provides a `TaskManager`, that you should use to register tasks to the queue.
+
+```php
+public function example (TaskManager $taskManager)
+{
+	$someJob = new JobMessage();
+	$taskManager->enqueue($someJob);
+}
+```
+
+
+## Unique Tasks
+
+The task manager has a feature to only add tasks if there isn't the same task already registered. For that you need to give the task a unique name.
+
+You can provide a name either by passing it to `enqueue()`:
+
+```php
+$taskManager->enqueue($message, "unique.message.key");
+```
+
+But it is recommended to add a name to the task itself:
+
+```php
+class ImportDataTask implements UniqueMessageInterface
+{
+	public function __construct (
+		private string $locale,
+	) {}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getJobId () : ?string
+	{
+		return "import-data.{$this->locale}";
+	}
+}
+```
+
+:::best-practice
+To ensure consistent job ids, you should always use the `UniqueMessageInterface` in favor of inline job keys.
+:::
+
+
+## Priorities
+
+The task manager also supports mirroring your priorities internally.
+
+You can implicitly define the priority of the queues in Symfony by ordering the queues in your `bin/console messenger:consume queue1 queue2` call.
