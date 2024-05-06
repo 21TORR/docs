@@ -39,11 +39,16 @@ The details include:
 ```php
 $video->id // the video id
 $video->platform // the platform where this video is hosted (currently Vimeo and YouTube only)
-$video->videoTyp // the type of the video
 
 $details->getEmbedUrl() // will give you the normalized embed URL to use this video in your app
 ```
 
-The video types will be one of
-- `"short"` for a YouTube shorts URL
-- `"video"` for all other recognized video URLs
+Currently supported video platforms are:
+
+| Platform         | Key             |
+|------------------|-----------------|
+| Vimeo            | `vimeo`         |
+| YouTube          | `youtube`       |
+| YouTube (Shorts) | `youtube-short` |
+
+In your PHP code, you should always use the `VideoPlatform::*` enums.
