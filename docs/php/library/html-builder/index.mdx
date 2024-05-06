@@ -7,6 +7,101 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/html-builder"
 />
 
-:::caution
-The docs still need to be written.
-:::
+The HTML Builder library is a small helper to easily and robustly build HTML.
+
+
+## Installation
+
+Install the bundle with composer:
+
+```shell
+composer require 21torr/html-builder
+```
+
+
+## Usage
+
+First you create your `HtmlElement`s, then you generate the HTML using the builder:
+
+```php
+use Torr\HtmlBuilder\Builder\HtmlBuilder;
+
+$element = new HtmlElement(/* ... */);
+
+$builder = new HtmlBuilder();
+$builder->build($element);
+```
+
+You can either keep the builder as service, or recreate it every time. The constructor is supposed to be cheap.
+
+
+### Element
+
+To create a new `HtmlElement`:
+
+```php
+use Torr\HtmlBuilder\Node\HtmlElement;
+
+$element = new HtmlElement("a", [
+	"href" => "https://21torr.com",
+], $content);
+```
+
+As second parameter, you can either pass an array or `HtmlAttributes`.<br />
+The third parameter is the content, [see below](#content) for more info.
+
+
+### Attributes
+
+You can always either pass an array or use the `HtmlAttributes` object directly.
+
+```php
+use Torr\HtmlBuilder\Node\HtmlAttributes;
+
+$attributes = new HtmlAttributes([
+	"href" => "https://21torr.com",
+]);
+
+$attributes->set("data-test", "abc");
+$attributes->get("data-test");
+$attributes->get("data-test", $defaultValue);
+$attributes->all();
+
+// see below
+$attributes->getClassList();
+```
+
+
+#### Class List
+
+There is a special wrapper for class lists, that mirrors the DOM class list:
+
+```php
+use Torr\HtmlBuilder\Node\ClassList;
+
+$classList = new ClassList("existing classes");
+
+$classList->add("class1", "class2");
+$classList->remove("class1", "class2");
+$classList->contains("class1");
+
+// add if not exist, otherwise remove
+$classList->toggle("class1", "class2");
+
+// special setter
+$classList->set("class1", true); // adds
+$classList->set("class1", false); // removes
+```
+
+It automatically deduplicates classnames.
+
+
+### Content
+
+You can pass content to the elements. Every element receives an array of content elements.
+
+As content, you can either add
+
+- a `string` (will automatically be HTML escaped)
+- another `HtmlElement`
+- a `SafeMarkup(string $html)` (will use the `$html` string directly, without escaping)
