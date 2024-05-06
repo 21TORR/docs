@@ -7,6 +7,151 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/simple-normalizer"
 />
 
-:::caution
-The docs still need to be written.
-:::
+The Simple Normalizer is a fast and simple normalizer, optimized for high performance.
+
+
+## Installation
+
+Install the library using composer:
+
+```shell
+composer require 21torr/simple-normalizer
+```
+
+When using Symfony Flex there is nothing else to do, otherwise you need to manually load the bundle.
+
+
+## Usage
+
+The bundle provides a `SimpleNormalizer` service, that you can use to normalize your data:
+
+```php
+$normalizer->normalize($value, $context);
+
+// or to make sure that you get an array back
+$normalizer->normalizeArray($value, $context);
+
+// or when requiring a map (see below)
+$normalizer->normalizeMap($value, $context);
+```
+
+The normalizer will automatically keep all scalar values and traverse all arrays. For every object it encounters, it will use a custom normalizer to normalize the content. There is no automatic object support of any kind.
+
+You need to [register custom object normalizers](#object-normalizers) for every object in the data tree.
+
+### List Handling
+
+When normalizing list-arrays (numerical arrays without gaps), the normalizer will automatically filter out values that are normalized to `null`.
+
+```php
+$normalizer->normalize(["a", null, "b"]);
+
+// will normalize to
+
+["a", "b"]
+```
+
+
+### Map Handling
+
+The normalizer is intended to prepare data for serialization. So it is supposed to be used with any data, and the result can then be transformed to JSON using `json_serialize()`.
+
+When normalizing key-value-maps however, there is an issue with empty arrays:
+
+```php
+[
+	"test" => "abc"
+]
+```
+
+will be normalized + serialized to
+
+```json
+{"test": "abc"}
+```
+
+
+However an empty map will be normalized to an array:
+
+```json
+[]
+```
+
+That is due to the fact, that `json_encode()` can't know whether you want an object or an array here. For PHP that doesn't matter: both will decode to the same data structure. However, in JavaScript they will decode to either `[]` or `{}`, which are not compatible.
+
+So for this case, you can use `->normalizeMap()`, which will return `stdClass` for the case of an empty array, as this will be JSON encoded to `{}`.
+
+
+## Object Normalizers
+
+For every object you want to normalize, you need to register a custom normalizer.
+
+```php
+use Torr\SimpleNormalizer\Normalizer\SimpleObjectNormalizerInterface;
+
+class MyObjectNormalizer implements SimpleObjectNormalizerInterface
+{
+	/**
+	 * @inheritDoc
+	 */
+	public function normalize (object $value, array $context, SimpleNormalizer $normalizer) : mixed
+	{
+		assert($value instanceof MyObject);
+
+		// implement your normalization here
+		return [
+			"title" => $value->getTitle(),
+			// ...
+		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function getNormalizedType () : string
+	{
+		return MyObject::class;
+	}
+}
+```
+
+The class is automatically configured when using Symfonys autoconfiguration.
+
+
+Your `normalize()` method gets passed the normalizer, so you can recursively normalize content:
+
+```php
+public function normalize (object $value, array $context, SimpleNormalizer $normalizer) : mixed
+{
+	assert($value instanceof MyObject);
+
+	// implement your normalization here
+	return [
+		"image" => $normalizer->normalize($value->getImage(), $context),
+		// ...
+	];
+}
+```
+
+## Context
+
+The recursive normalization process uses an additional `$context` array, that you can use to modify the normalization behavior or add global context for normalization (like a locale that the data is normalized for).
+
+```php
+$normalizer->normalize($value, [
+	"locale" => "de",
+]);
+```
+
+And then use it in your normalizers:
+
+```php
+public function normalize (object $value, array $context, SimpleNormalizer $normalizer) : mixed
+{
+	assert($value instanceof MyObject);
+
+	$locale = $context["locale"] ?? "en";
+
+	// ...
+}
+```
