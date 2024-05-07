@@ -2,16 +2,6 @@
 
 ## Animation
 
-### `addConsecutiveClasses()`
-
-```typescript
-addConsecutiveClasses(element, firstClass, secondClass, onUpdate?)
-```
-
-Adds the first classes in the next animation frame, and the second in the frame thereafter.
-
-Takes an optional callback that is called when the classes were updated, first with parameter `end = false` for the first class, then with `end = true` for the second class.
-
 
 ## JSON
 
@@ -86,3 +76,41 @@ Always properly abort your `fetch()` requests in effects when rerunning.
 :::
 
 
+## Popup Interaction
+
+These helpers provide support for overlay integrations.
+
+## `registerBodyClickHandler()`
+
+```typescript
+registerBodyClickHandler(allowedClickTargets, onInvalidTargetClick) : UnregisterCallback
+```
+
+Registers a global click handler, that checks for every click if it is in one of the `allowedClickTargets`. If it isn't, the `onInvalidTargetClick` callback is triggered.
+
+Returns an unregister callback to remove the global click listener.
+
+> This is useful for implementing overlays: you can detect clicks outside the overlay, but add the overlay itself as allowed click target.
+
+
+## `initDismissibleContainer()`
+
+```typescript
+initDismissibleContainer(
+	trigger,
+	allowedContainers,
+	callback,
+) : DismissibleContainerDirector
+```
+
+It takes a list of `triggers` and a list of `allowedContainers`. To integrate the interaction, you pass a `callback`.
+
+The integration does the following things:
+
+- if the status changes, the `callback` is called with a boolean parameter, that tells you whether it is active or not
+- A click on a trigger toggles the active state
+- When active, a click outside the `triggers` / the `allowedContainers` sets the state to inactive.
+
+> This helps you to implement an overview, just like [`registerBodyClickHandler()`](#registerbodyclickhandler). The additional feature here is the automatic integration of external triggers.
+>
+> So in this example the overlay might be a navigation drawer, that can be toggled by a hamburger button somewhere in the page.
