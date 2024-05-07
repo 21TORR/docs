@@ -1,0 +1,88 @@
+# JS Helpers
+
+## Animation
+
+### `addConsecutiveClasses()`
+
+```typescript
+addConsecutiveClasses(element, firstClass, secondClass, onUpdate?)
+```
+
+Adds the first classes in the next animation frame, and the second in the frame thereafter.
+
+Takes an optional callback that is called when the classes were updated, first with parameter `end = false` for the first class, then with `end = true` for the second class.
+
+
+## JSON
+
+### `safeParseJson()`
+
+```typescript
+safeParseJson<DataType>(value)
+```
+
+Parses the given value as JSON and returns it cast as the `DataType`.
+
+:::caution
+This function doesn't validate the data in any way. It is recommended to use zod to validate the schema.
+:::
+
+
+### `parseElementContentAsJson()`
+
+```typescript
+parseElementContentAsJson<DataType>(element)
+```
+
+Uses the text content of the given element, parses it as JSON and returns the parsed json.
+
+This is especially useful when hydrating `<script type="application/json">` tags.
+
+:::caution
+This function doesn't validate the data in any way. It is recommended to use zod to validate the schema.
+:::
+
+## Network
+
+### `isAbortError()`
+
+```typescript
+isAbortError(error)
+```
+
+A helper to help when catching fetch failures. They occur frequently when fetching in an effect in React and eagerly aborting the request when rerunning the effect.
+
+```typescript
+import {isAbortError} from "@21torr/dune/network";
+
+useEffect(() =>
+{
+	const controller = new AbortController();
+
+	fetch(..., {
+		signal: controller.signal,
+	})
+		.then(...)
+		.catch(error =>
+		{
+			if (isAbortError(error))
+			{
+				// don't do anything for abort errors
+				return;
+			}
+
+			// ...
+		});
+
+	return () =>
+	{
+		controller.abort();
+	};
+}, [...]);
+```
+
+:::best-practice
+Always properly abort your `fetch()` requests in effects when rerunning.
+:::
+
+

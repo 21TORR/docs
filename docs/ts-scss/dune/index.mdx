@@ -13,54 +13,45 @@ It provides standalone functions, React components and Next.js-integrated compon
 
 
 
-## DOM Helpers
+## DOM + JS Helpers
 
-### DOM Attribute Helpers
-
-- [`toggleClass()`](/docs/ts-scss/dune/dom#toggleclass)
-
-
-### Event Helpers
-
-- [`on()`](/docs/ts-scss/dune/dom#on)
-- [`off()`](/docs/ts-scss/dune/dom#off)
-- [`once()`](/docs/ts-scss/dune/dom#once)
+- [`addConsecutiveClasses()`](/docs/ts-scss/dune/js#addconsecutiveclasses)
+- [`children()`](/docs/ts-scss/dune/dom#children)
+- [`closest()`](/docs/ts-scss/dune/dom#closest)
 - [`delegate()`](/docs/ts-scss/dune/dom#delegate)
+- [`find()`](/docs/ts-scss/dune/dom#find)
+- [`findFirst()`](/docs/ts-scss/dune/dom#findfirst)
+- [`isAbortError()`](/docs/ts-scss/dune/js#isaborterror)
+- [`isChildOf()`](/docs/ts-scss/dune/dom#ischildof)
+- [`next()`](/docs/ts-scss/dune/dom#next)
+- [`off()`](/docs/ts-scss/dune/dom#off)
+- [`on()`](/docs/ts-scss/dune/dom#on)
+- [`once()`](/docs/ts-scss/dune/dom#once)
 - [`onOff()`](/docs/ts-scss/dune/dom#onoff)
+- [`parseElementContentAsJson()`](/docs/ts-scss/dune/js#parseelementcontentasjson)
+- [`prev()`](/docs/ts-scss/dune/dom#prev)
+- [`safeParseJson()`](/docs/ts-scss/dune/js#safeparsejson)
+- [`toggleClass()`](/docs/ts-scss/dune/dom#toggleclass)
 - [`trigger()`](/docs/ts-scss/dune/dom#trigger)
 
 
 
-### DOM Traversal Helpers
-
-- [`findFirst()`](/docs/ts-scss/dune/dom#findfirst)
-- [`find()`](/docs/ts-scss/dune/dom#find)
-- [`children()`](/docs/ts-scss/dune/dom#children)
-- [`prev()`](/docs/ts-scss/dune/dom#prev)
-- [`next()`](/docs/ts-scss/dune/dom#next)
-- [`closest()`](/docs/ts-scss/dune/dom#closest)
-- [`isChildOf()`](/docs/ts-scss/dune/dom#ischildof)
-
 ## React Helpers
-
 
 Some of these components / hooks are intended to be used in Next.js only, some can be used in a standalone React project. Look at the imports of the implementation to see which is Next.js-only.
 
-### React Components
+- **React Components**
+	- [`<AnchorIntegration />`](/docs/ts-scss/dune/react/anchor-integration)
+	- [`<ClientOnlyPortal />`](/docs/ts-scss/dune/react/client-only-portal)
+	- [`<Cookiebot />`](/docs/ts-scss/dune/react/cookiebot#component)
+	- [`<Usercentrics />`](/docs/ts-scss/dune/react/usercentrics#component)
 
-- [`<AnchorIntegration />`](/docs/ts-scss/dune/react/anchor-integration)
-- [`<ClientOnlyPortal />`](/docs/ts-scss/dune/react/client-only-portal)
-- [`<Cookiebot />`](/docs/ts-scss/dune/react/cookiebot#component)
-- [`<Usercentrics />`](/docs/ts-scss/dune/react/usercentrics#component)
-
-### React Hooks
-
-- [`useCookiebot()`](/docs/ts-scss/dune/react/cookiebot#hook)
-- [`useDebounced()`](/docs/ts-scss/dune/react/debounce)
-- [`useMediaQuery()`](/docs/ts-scss/dune/react/media-query)
-- [`useUsercentrics()`](/docs/ts-scss/dune/react/usercentrics#hook)
+- **React Hooks**
+	- [`useCookiebot()`](/docs/ts-scss/dune/react/cookiebot#hook)
+	- [`useDebounced()`](/docs/ts-scss/dune/react/debounce)
+	- [`useMediaQuery()`](/docs/ts-scss/dune/react/media-query)
+	- [`useUsercentrics()`](/docs/ts-scss/dune/react/usercentrics#hook)
 
 
-### Next.js Middleware Integrations
-
-- [`handleHttpBasicAuth()`](/docs/ts-scss/dune/react/http-auth)
+- **Next.js Middleware Integrations**
+	- [`handleHttpBasicAuth()`](/docs/ts-scss/dune/react/http-auth)
