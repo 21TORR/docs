@@ -1,0 +1,363 @@
+# Helpers
+
+
+## DOM Attribute
+
+### `toggleClass()`
+
+```typescript
+toggleClass(element, className, addClass)
+```
+
+A helper, where you can control via the `addClass` parameter whether to add or remove classes.
+
+- You can pass an array of elements as `element`.
+- You can also pass multiple classes as array in `className`.
+
+
+
+## DOM Traversal
+
+### `findFirst()`
+
+```typescript
+findFirst(selector, context)
+```
+
+Small wrapper around `querySelector()`. Pass the container as `context` you want to search in, by default `document` is used.
+
+
+### `find()`
+
+```typescript
+find(selector, context)
+```
+
+Wrapper around `querySelectorAll`, always returns a (real) array. Pass the container as `context` you want to search in, by default `document` is used.
+
+
+### `children()`
+
+```typescript
+children(parent, selector = null)
+```
+
+Returns all children elements of the given `parent`. Can be directly filtered by the given selector.
+
+
+### `prev()`
+
+```typescript
+prev(element, selector = null)
+```
+
+Returns all previous siblings, optionally only those matching a given selector. Excludes the `element` itself.
+
+
+### `next()`
+
+```typescript
+next(element, selector = null)
+```
+
+Returns all following siblings, optionally only those matching a given selector. Excludes the `element` itself.
+
+
+### `closest()`
+
+```typescript
+closest(element, selector, rootElement = null)
+```
+
+Finds the nearest parent that matches the given selector. The element itself is **included**, if it matches.
+
+You can optionally pass a maximum root element, where the search should stop, so that you can contain the search to a specific subtree.
+
+
+### `isChildOf()`
+
+```typescript
+isChildOf(parent, node)
+```
+
+Checks, whether the given `node` is a child of the `parent`.
+
+Will return `true` if both parameters are the same node.
+
+
+
+## Event
+
+### `on()`
+
+```typescript
+on(element, type, handler, options?)
+```
+
+Registers an event listener.
+
+
+- You can pass an array of elements as `element`.
+- You can also pass an array as `type` or a combined string like `"click blur"`.
+
+
+### `off()`
+
+```typescript
+off(element, type, handler)
+```
+
+Unregisters an event listener.
+
+- You can pass an array of elements as `element`.
+- You can also pass an array as `type` or a combined string like `"click blur"`.
+
+
+### `once()`
+
+```typescript
+once(element, type, handler)
+```
+
+Registers an event listener and automatically unregisters it after the first event is triggered.
+
+
+### `delegate()`
+
+```typescript
+delegate(element, selector, type, handler) : UnregisterEventCallback
+```
+
+Takes a container and registers an event listener to it, that will automatically trigger for all elements matching `selector`
+inside of it.
+
+This is useful if you want to register "live event listeners". If you have a container that replaces the HTML content, you would lose registered event handlers every time as you are replacing the element. With this helper you register the event listener on the parent and match the event on demand to the contained element. This implies, that the events need to bubble to the parent.
+
+```typescript
+const container = findFirst("#some-element");
+
+// manually register event listeners on the buttons directly
+on(find("button", container), "click", () => { /* ... */ });
+// also register a delegate on the container
+delegate(container, "button", "click", () => {/* ... */});
+
+// clicking the button will now trigger both event handlers
+
+// now replace the content
+container.innerHTML = "<button>new button</button>";
+
+// clicking the button now will not trigger the direct event
+// listeners as the elements don't exist anymore, on which
+// the listener was registered.
+
+// the delegate event will keep triggering, as the listener
+// for that is actually registered on the container
+// (that was left untouched)
+```
+
+The function returns a callback to unregister the event listener:
+
+```typescript
+const unregister = delegate(...);
+
+// now the event listener is live
+
+// now unregister it:
+unregister();
+```
+
+
+### `onOff()`
+
+```typescript
+onOff(element, type, handler)
+```
+
+Registers an event listener and returns a function to unregister it:
+
+```typescript
+const unregister = onOff(button, "click", () => {...});
+
+// now the event listener is live
+
+// now unregister it:
+unregister();
+```
+
+:::tip
+This helper is useful in React hooks, as they use the "return the cleanup function" pattern:
+
+```typescript
+useEffect(() =>
+{
+	return onOff(document, "some:event", () => {...});
+}, []);
+```
+:::
+
+
+### `trigger()`
+
+```typescript
+trigger(element, type, data?)
+```
+
+Triggers a custom event with the given type.
+You can pass additional data, that is passed to the event:
+
+```typescript
+const button = findFirst("button");
+
+on(button, "click", (event: CustomEvent) =>
+{
+	console.log(event.detail);
+});
+
+trigger(button, "click", {
+	some: "data",
+});
+```
+
+
+
+## JSON
+
+### `safeParseJson()`
+
+```typescript
+safeParseJson<DataType>(value)
+```
+
+Parses the given value as JSON and returns it cast as the `DataType`.
+
+:::caution
+This function doesn't validate the data in any way. It is recommended to use zod to validate the schema.
+:::
+
+
+### `parseElementContentAsJson()`
+
+```typescript
+parseElementContentAsJson<DataType>(element)
+```
+
+Uses the text content of the given element, parses it as JSON and returns the parsed json.
+
+This is especially useful when hydrating `<script type="application/json">` tags.
+
+:::caution
+This function doesn't validate the data in any way. It is recommended to use zod to validate the schema.
+:::
+
+
+
+## Network
+
+### `isAbortError()`
+
+```typescript
+isAbortError(error)
+```
+
+A helper to help when catching fetch failures. They occur frequently when fetching in an effect in React and eagerly aborting the request when rerunning the effect.
+
+```typescript
+import {isAbortError} from "@21torr/dune/network";
+
+useEffect(() =>
+{
+	const controller = new AbortController();
+
+	fetch(..., {
+		signal: controller.signal,
+	})
+		.then(...)
+		.catch(error =>
+		{
+			if (isAbortError(error))
+			{
+				// don't do anything for abort errors
+				return;
+			}
+
+			// ...
+		});
+
+	return () =>
+	{
+		controller.abort();
+	};
+}, [...]);
+```
+
+:::best-practice
+Always properly abort your `fetch()` requests in effects when rerunning.
+:::
+
+
+
+## Popup Interaction
+
+These helpers provide support for overlay integrations.
+
+### `registerBodyClickHandler()`
+
+```typescript
+registerBodyClickHandler(allowedClickTargets, onInvalidTargetClick) : UnregisterCallback
+```
+
+Registers a global click handler, that checks for every click if it is in one of the `allowedClickTargets`. If it isn't, the `onInvalidTargetClick` callback is triggered.
+
+Returns an unregister callback to remove the global click listener.
+
+> This is useful for implementing overlays: you can detect clicks outside the overlay, but add the overlay itself as allowed click target.
+
+
+### `initDismissibleContainer()`
+
+```typescript
+initDismissibleContainer(
+	trigger,
+	allowedContainers,
+	callback,
+) : DismissibleContainerDirector
+```
+
+It takes a list of `triggers` and a list of `allowedContainers`. To integrate the interaction, you pass a `callback`.
+
+The integration does the following things:
+
+- if the status changes, the `callback` is called with a boolean parameter, that tells you whether it is active or not
+- A click on a trigger toggles the active state
+- When active, a click outside the `triggers` / the `allowedContainers` sets the state to inactive.
+
+It returns a director, that can be called directly to set the state to inactive, and has an additional `destroy()` helper:
+
+```typescript
+const director = initDismissibleContainer(...);
+
+// set the state to inactive
+director();
+
+// destroy the integration (= removes all listeners etc)
+directory.destroy();
+```
+
+
+> This helps you to implement an overview, just like [`registerBodyClickHandler()`](#registerbodyclickhandler). The additional feature here is the automatic integration of external triggers.
+>
+> So in this example the overlay might be a navigation drawer, that can be toggled by a hamburger button somewhere in the page.
+
+
+
+## Timing
+
+### `onNextAnimationFrame()`
+
+```typescript
+onNextAnimationFrame(callback)
+```
+
+Helper to integrate in animation frames. This will combine multiple calls during the same frame to a single call.
+
+> This is useful to debounce fast triggering events, like `mousemove`, `scroll` or `resize`.
