@@ -1,0 +1,19 @@
+# Debounce
+
+```typescript
+useDebounced(value, delay, onSetCallback?)
+```
+
+The `useDebounce()` hook helps when integrating rapidly changing values: the debounced value is only ever updated if it didn't change in the last `delay` milliseconds.
+
+
+```typescript
+import {useDebounced} from "@21torr/dune/react/hooks/debounce";
+
+const [actualValue, setActualValue] = useState("some value");
+const debouncedValue = useDebounced(actualValue, 500);
+```
+
+With the `onSetCallback` you can hook into the live update of the value, if you need the value directly instead of adding an effect that reacts on the debounced value.
+
+One of the prime use cases of this hook is a search input: you only ever want to search after the user stopped typing for a few ms.
