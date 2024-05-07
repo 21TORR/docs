@@ -111,6 +111,19 @@ The integration does the following things:
 - A click on a trigger toggles the active state
 - When active, a click outside the `triggers` / the `allowedContainers` sets the state to inactive.
 
+It returns a director, that can be called directly to set the state to inactive, and has an additional `destroy()` helper:
+
+```typescript
+const director = initDismissibleContainer(...);
+
+// set the state to inactive
+director();
+
+// destroy the integration (= removes all listeners etc)
+directory.destroy();
+```
+
+
 > This helps you to implement an overview, just like [`registerBodyClickHandler()`](#registerbodyclickhandler). The additional feature here is the automatic integration of external triggers.
 >
 > So in this example the overlay might be a navigation drawer, that can be toggled by a hamburger button somewhere in the page.
