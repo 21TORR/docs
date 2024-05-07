@@ -1,0 +1,38 @@
+# Usercentrics
+
+## Component
+
+There is a component for loading Usercentrics:
+
+```tsx
+import {Usercentrics} from "@21torr/dune/next/components/Snippet/Usercentrics";
+
+<Usercentrics id="..." />
+```
+
+
+## Hook
+
+There also is a hook to be able to interact with Usercentrics inside of pages:
+
+```tsx
+import {useUsercentrics} from "@21torr/dune/react/hooks/usercentrics";
+
+const cookiebot = useUsercentrics();
+
+// check consent levels
+console.log(true === cookiebot.consent.marketing);
+console.log(true === cookiebot.consent.preferences);
+console.log(true === cookiebot.consent.statistics);
+
+// true if any non-essential categories are selected
+console.log(true === cookiebot.hasAnyConsent);
+
+// or open the consent manager
+<button
+	type="button"
+	onClick={() => cookiebot.openConsentManager()}
+>
+	Open Consent Manager
+</button>
+```

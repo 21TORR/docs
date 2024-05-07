@@ -1,0 +1,27 @@
+# Media Query Hooks
+
+A simple hook that integrates into media queries.
+
+
+```typescript
+import {useMediaQuery} from "@21torr/dune/react/hooks/media-query";
+
+const isLarge = useMediaQuery("(min-width: 1000px)");
+```
+
+To avoid hydration issues, this hook will first render to `false` and on the client rerender with the actual media query.
+
+:::best-practice
+Instead of using the hook in your components directly, you should create named media query hooks, that mirror the names of your CSS media queries:
+
+```typescript
+// Create named hook
+export function useIsLarge () : bool
+{
+	return useMediaQuery("(min-width: 1000px)");
+}
+
+// use the named hooks in your components
+const isLarge = useIsLarge();
+```
+:::
