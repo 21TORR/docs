@@ -127,3 +127,16 @@ directory.destroy();
 > This helps you to implement an overview, just like [`registerBodyClickHandler()`](#registerbodyclickhandler). The additional feature here is the automatic integration of external triggers.
 >
 > So in this example the overlay might be a navigation drawer, that can be toggled by a hamburger button somewhere in the page.
+
+
+## Timing
+
+### `onNextAnimationFrame()`
+
+```typescript
+onNextAnimationFrame(callback)
+```
+
+Helper to integrate in animation frames. This will combine multiple calls during the same frame to a single call.
+
+> This is useful to debounce fast triggering events, like `mousemove`, `scroll` or `resize`.
