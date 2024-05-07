@@ -181,6 +181,7 @@ const config = {
 					"json",
 					"json5",
 					"php",
+					"scss",
 					"twig",
 					"yaml",
 				],
