@@ -180,6 +180,7 @@ const config = {
 					"ini",
 					"json",
 					"json5",
+					"markup",
 					"php",
 					"scss",
 					"twig",

@@ -1,0 +1,32 @@
+# Twig Extension
+
+The RAD bundle automatically enables a twig extension with smaller helpers.
+
+## Function: `data_container()`
+
+```twig
+{{ data_container(data, class, id = null) }}
+```
+
+This will take the data in `data`, and add it JSON-encoded in a script tag:
+
+```html
+<script id="id" class="..." type="application/json">...</script>
+```
+
+The `id` and `class` parameters control the corresponding attributes on the `script` tag. The element will automatically get a `_data-container` attribute.
+
+You can use these JSON tags to mount interactive elements on them.
+
+
+## Filter: `appendToArrayKey`
+
+```twig
+{% set someArray = someArray | appendToArrayKey(key, value) %}
+```
+
+The filter will take a `key` and `value`.
+
+It will take (or create) the string value at `array[key]` and string concatenate  the `value` to it (with a space inbetween).
+
+You can use that to append classes to an array key.

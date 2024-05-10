@@ -1,0 +1,69 @@
+# API Response
+
+The RAD bundle uses a simple API structure, that basically looks like this:
+
+
+```typescript
+// it's either success:
+
+interface Success
+{
+	ok: true;
+	data: any;
+}
+
+// or failure:
+
+interface Failure
+{
+	ok: false;
+	data?: any;
+	error: string;
+}
+```
+
+In `data` you would then put all your payload data.
+
+In an error case, an error message is provided. You should use error keys here (like `form-invalid`) instead of full messages, so that your frontend can better react to the error and translate the messages.
+
+
+## Controller Integration
+
+The bundle has an automatic integration for controllers.
+
+Your controller can just return an `ApiResponse` and it will be automatically transformed to the proper response.
+
+```php
+class MyController
+{
+	public function myAction () : ApiResponse
+	{
+		// ...
+
+		return new ApiResponse(200, [
+			"some" => "data",
+		]);
+	}
+}
+```
+
+The first parameter is the HTTP status code the response should have.
+
+:::best-practice
+Always use the semantically correct HTTP status codes.
+:::
+
+Returning an error can look like this:
+
+```php
+return (new ApiResponse(422, [
+	"formErrors" => ...,
+]))
+	->withStatusCode("invalid-request");
+```
+
+An error response can also return `data`, like proper error messages, form errors, etc
+
+:::tip
+The `ok` parameter will be automatically determined by whether the status code is a 2xx success code.
+:::
