@@ -93,6 +93,19 @@ However, that is intended: the whole purpose of this package is to force the app
 We use our own [PHP-CS-Fixer] package, as it adds custom configuration for our usage.
 
 
+## PHPStan
+
+Janus uses a pretty strict PHPStan config. One of the most prominent issues is that "unspecified iterable" error, you can deactivate it with this config:
+
+
+```yaml title="phpstan.neon"
+parameters:
+	ignoreErrors:
+		- identifier: missingType.iterableValue
+```
+
+**You should work on typing your iterables however, to have a clean project and be able to remove this ignore rule in the future.**
+
 
 [Composer bin plugin]: /docs/php/tooling/#composer-bin-plugin
 [Composer Normalize]: https://github.com/ergebnis/composer-normalize
