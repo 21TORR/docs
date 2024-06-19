@@ -7,6 +7,12 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 	packagist="https://packagist.org/packages/21torr/task-manager"
 />
 
+The task manager is a bundle that builds in top of [Symfony Messenger] to add additional convenience functionality for running, logging and queuing tasks.
+
+:::note
+As this bundle adds quite a lot of functionality on top of Symfonys messenger system, we use the names "task" instead of "message" and "task handler" instead of "message handler" to make clear, that these are the *extended versions*.
+:::
+
 
 ## Installation
 
@@ -16,9 +22,9 @@ First install this bundle:
 composer require 21torr/task-manager
 ```
 
-Then configure your queues in `config/packages/task_manager.yaml`:
+Then configure your queues:
 
-```yaml
+```yaml title="config/packages/task_manager.yaml"
 task_manager:
     queues:
         # queues sorted by priority. Highest priority at the top
@@ -30,55 +36,171 @@ task_manager:
 While this bundle auto-detects all queue names, you should define them manually in your config, as otherwise the priority between these queues might be wrong.
 
 
-## Registering new Tasks
+## Defining Tasks
 
-The bundle provides a `TaskManager`, that you should use to register tasks to the queue.
-
-```php
-public function example (TaskManager $taskManager)
-{
-	$someJob = new JobMessage();
-	$taskManager->enqueue($someJob);
-}
-```
-
-
-## Unique Tasks
-
-The task manager has a feature to only add tasks if there isn't the same task already registered. For that you need to give the task a unique name.
-
-You can provide a name either by passing it to `enqueue()`:
+You have to define your tasks by creating a new task class extending the `Task` base class:
 
 ```php
-$taskManager->enqueue($message, "unique.message.key");
-```
+use Torr\TaskManager\Task\Task;
 
-But it is recommended to add a name to the task itself:
-
-```php
-class ImportDataTask implements UniqueMessageInterface
+class readonly PimImportTask extends Task
 {
 	public function __construct (
 		private string $locale,
-	) {}
+	)
+	{
+		parent::__construct();
+	}
 
 	/**
-	 * @inheritDoc
+	 *
 	 */
-	public function getJobId () : ?string
+	public function getMetaData () : TaskMetaData
 	{
-		return "import-data.{$this->locale}";
+		return new TaskMetaData(
+			label: "PIM Import: {$this->locale}",
+			group: "PIM",
+			uniqueTaskId: "pim.import.{$this->locale}",
+		);
 	}
 }
 ```
 
+:::caution
+Your task object needs to be serializable. Avoid unnecessary state, e.g. you should always generate the metadata object on-the-fly.
+:::
+
+### Metadata
+
+The task has to define some metadata, to have a convenient integration into automated tools.
+
+
+#### Label
+
+An identifying label for the task and it's configuration. You can use some or all parameters here, to improve readability.
+
+
+#### Group
+
+An optional group label. Used for grouping related tasks when building UI (like the CLI mentioned below).
+
+#### Unique Task Id
+
+The unique task id is used for uniquely identifying the type of certain tasks, to [avoid registering them multiple times](#unique-tasks).
+
+
+
+### Unique Tasks
+
+By default, tasks can be registered even if the same task is already added in the queue. For a lot of tasks this is quite wasteful, as running the same task consecutively multiple times will have the exact same result.
+
+> Example: you register a task to regenerate all image caches. If you change multiple images, you might want to register this task multiple times, once after every image change. By using correct task priority and putting the cache regeneration after all "adding images" tasks, you only need to run the task once.
+
+Every task can optionally define a unique task id that is used to identify the same tasks:
+
+```php
+return new TaskMetaData(
+	// ...
+	uniqueTaskId: "pim.import.{$this->locale}",
+);
+```
+
+When queueing the task, the task manager will first loop through all registered tasks in all queues and look for a task with the same unique task id. If one is found, the new task is not queued.
+
+:::tip
+You can and should use config state of the task object to have proper identifying task ids.
+:::
+
+In the PIM import example, you should use the locale to generate the task id — otherwise the EN and FR pim imports might use the same task id, and you would erroneously assume you don't have to run the task.
+
+
+
+## Queueing Tasks
+
+You can then queue these tasks using the `TaskManager`:
+
+```php
+use Torr\TaskManager\Manager\TaskManager;
+
+public function example (TaskManager $taskManager)
+{
+	$englishPimImport = new PimImportTask("en");
+	$taskManager->enqueue($englishPimImport);
+}
+```
+
+You can also queue tasks via the CLI, [see below](#registering-tasks).
+
+
+## Task Handlers
+
+As this bundle builds on top of Symfony messages, you define your task handler as message handler:
+
+```php
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Torr\TaskManager\Director\TaskDirector;
+
+final readonly class PimImportMessageHandler
+{
+	public function __construct (
+		private TaskDirector $taskDirector,
+	) {}
+
+	#[AsMessageHandler]
+	public function onPimImport (PimImportMessage $message) : void
+	{
+		// start the run
+		$run = $this->taskDirector->startRun($message);
+
+		// you can get the IO from the run director
+		$io = $run->getIo();
+
+		// ... do your thing ...
+
+		// at the end you mark your task as finished and indicate, whether the task was handled successfully
+		$run->finish(success: true);
+	}
+}
+```
+
+When your task failed, you have two options: you can either throw an exception, to mark this run as failed (and let the retry functionality kick in) or you can finish handling the task, but mark it as `success: false`.
+
+You use the task director to start a run for the given task. This will return a run director, that helps you with working through your run:
+
+- you can get IO to display information on the console
+- the IO output will automatically be logged as well
+- you can mark the run as success / failure
+
 :::best-practice
-To ensure consistent job ids, you should always use the `UniqueMessageInterface` in favor of inline job keys.
+Will not explicitly `->finish()`ed tasks will be handled properly, you should always `finish` all your task runs.
 :::
 
 
-## Priorities
+## Task Log
 
-The task manager also supports mirroring your priorities internally.
+The task and run directors automatically log the output of your tasks, whether they succeeded and some metadata. This includes the task object itself, so it must be serializable.
 
-You can implicitly define the priority of the queues in Symfony by ordering the queues in your `bin/console messenger:consume queue1 queue2` call.
+
+## Running the Message Handler
+
+Internally the task manager uses [Symfony Messenger], so to run the tasks, you just consume the messages:
+
+```shell
+bin/console messenger:consume queue1 queue2
+```
+
+
+### Priorities
+
+The task manager also supports mirroring your configured priorities internally.
+
+You have to implicitly define the priority of the queues in Symfony by ordering the queues in your CLI call:
+
+```php
+bin/console messenger:consume queue1 queue2
+```
+
+The earlier the queue name, the higher the priority, so in this case `queue1` has a higher priority than `queue2`.
+
+
+[Symfony Messenger]: https://symfony.com/doc/current/messenger.html
