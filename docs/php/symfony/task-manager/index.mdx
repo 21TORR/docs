@@ -142,18 +142,6 @@ You can view all registered tasks in the debug command:
 bin/console task-manager:debug
 ```
 
-You can automatically queue registered tasks via the CLI:
-
-```shell
-bin/console task-manager:queue
-```
-
-You can either interactively select the tasks or directly pass the task IDs to the command:
-
-```shell
-bin/console task-manager:queue task-id-1 task-id-2
-```
-
 
 ## Queueing Tasks
 
@@ -169,7 +157,35 @@ public function example (TaskManager $taskManager)
 }
 ```
 
-You can also queue tasks via the CLI, [see below](#registering-tasks).
+If you need to pass stamps, you can do that in the second parameter:
+
+```php
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
+
+$taskManager->enqueue(new PimImportTask("en"), [
+	new DispatchAfterCurrentBusStamp(),
+]);
+````
+
+
+:::best-practice
+When queueing tasks inside a task handler, you should always add the `DispatchAfterCurrentBusStamp`.
+:::
+
+
+You can also queue tasks via the CLI:
+
+You can automatically queue registered tasks via the CLI:
+
+```shell
+bin/console task-manager:queue
+```
+
+You can either interactively select the tasks or directly pass the task IDs to the command:
+
+```shell
+bin/console task-manager:queue task-id-1 task-id-2
+```
 
 
 ## Task Handlers
