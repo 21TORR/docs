@@ -114,6 +114,46 @@ You can and should use config state of the task object to have proper identifyin
 In the PIM import example, you should use the locale to generate the task id — otherwise the EN and FR pim imports might use the same task id, and you would erroneously assume you don't have to run the task.
 
 
+## Registering Tasks
+
+The bundle provides a way to register your tasks in a global registry, that then can be used to build a UI around automatically queueing tasks.
+
+You can integrate your existing task classes by registering them in the event:
+
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Torr\TaskManager\Event\RegisterTasksEvent;
+
+class RegisterTasksListener
+{
+	#[AsEventListener]
+	public function onRegisterTasks (RegisterTasksEvent $event) : void
+	{
+		$event->register(new PimImportTask("de"));
+	}
+}
+```
+
+By default, your tasks are not auto-detected, so you can have "internal" tasks that are not manually selectable.
+
+You can view all registered tasks in the debug command:
+
+```shell
+bin/console task-manager:debug
+```
+
+You can automatically queue registered tasks via the CLI:
+
+```shell
+bin/console task-manager:queue
+```
+
+You can either interactively select the tasks or directly pass the task IDs to the command:
+
+```shell
+bin/console task-manager:queue task-id-1 task-id-2
+```
+
 
 ## Queueing Tasks
 
@@ -172,7 +212,7 @@ You use the task director to start a run for the given task. This will return a 
 - you can mark the run as success / failure
 
 :::best-practice
-Will not explicitly `->finish()`ed tasks will be handled properly, you should always `finish` all your task runs.
+While not explicitly `->finish()`ed tasks will be handled properly, you should always `finish` all your task runs.
 :::
 
 
@@ -180,27 +220,33 @@ Will not explicitly `->finish()`ed tasks will be handled properly, you should al
 
 The task and run directors automatically log the output of your tasks, whether they succeeded and some metadata. This includes the task object itself, so it must be serializable.
 
+You can view the task log via the CLI:
+
+```shell
+bin/console task-manager:log
+```
+
 
 ## Running the Message Handler
 
 Internally the task manager uses [Symfony Messenger], so to run the tasks, you just consume the messages:
 
 ```shell
-bin/console messenger:consume queue1 queue2
+bin/console messenger:consume $(bin/console task-manager:messenger:queue-names)
 ```
 
+This command automatically uses the queues in the correct (by priority in descending) order.
+Schedules automatically stay at the top of the priority list.
 
-### Priorities
 
-The task manager also supports mirroring your configured priorities internally.
+## Debugging
 
-You have to implicitly define the priority of the queues in Symfony by ordering the queues in your CLI call:
+You can debug your detected transports, the priority and the registered task via the CLI:
 
-```php
-bin/console messenger:consume queue1 queue2
+```shell
+bin/console task-manager:debug
 ```
 
-The earlier the queue name, the higher the priority, so in this case `queue1` has a higher priority than `queue2`.
 
 
 [Symfony Messenger]: https://symfony.com/doc/current/messenger.html
