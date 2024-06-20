@@ -221,7 +221,7 @@ final readonly class PimImportMessageHandler
 
 When your task failed, you have two options: you can either throw an exception, to mark this run as failed (and let the retry functionality kick in) or you can finish handling the task, but mark it as `success: false`.
 
-You use the task director to start a run for the given task. This will return a run director, that helps you with working through your run:
+You use the `TaskDirector` to start a run for the given task. This will return a `RunDirector`, that helps you with working through your run:
 
 - you can get IO to display information on the console
 - the IO output will automatically be logged as well
@@ -234,7 +234,7 @@ While not explicitly `->finish()`ed tasks will be handled properly, you should a
 
 ## Task Log
 
-The task and run directors automatically log the output of your tasks, whether they succeeded and some metadata. This includes the task object itself, so it must be serializable.
+The `TaskDirector` and `RunDirector` automatically log the output of your tasks, whether they succeeded and some metadata. This includes the task object itself, so it must be serializable.
 
 You can view the task log via the CLI:
 
