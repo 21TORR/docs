@@ -110,30 +110,27 @@ There are automatic build info integrations for the following info:
 
 
 
+### Hooks
 
-
-### Tasks
-
-This bundle provides infrastructure for your app to run one-time tasks after build or deployment.
+This bundle provides infrastructure for your app to run one-time hooks after build or deployment.
 
 These are called using the console commands:
 
 ```shell
-bin/console hosting:run-tasks:post-build
-bin/console hosting:run-tasks:post-deploy
+bin/console hosting:hook:build
+bin/console hosting:hook:deploy
 ```
 
-You can integrate into them by implementing the `PostBuildTaskInterface` or `PostDeploymentTaskInterface` interfaces respectively. Use autoconfiguration, then everything works out-of-the-box.
+You can integrate into them by implementing the `BuildHookInterface` or `DeployHookInterface` interfaces respectively. Use autoconfiguration, then everything works out-of-the-box.
 
 Every task has basically a label and a callback that can perform certain tasks:
 
 ```php
-use Torr\Hosting\Deployment\PostBuildTaskInterface;
+use Torr\Hosting\Deployment\BuildHookInterface;
 
-class MyBuildTask implements PostBuildTaskInterface
+class MyBuildTask implements BuildHookInterface
 {
 	/**
-	 * @inheritDoc
 	 */
 	public function getLabel () : string
 	{
@@ -141,7 +138,6 @@ class MyBuildTask implements PostBuildTaskInterface
 	}
 
 	/**
-	 * @inheritDoc
 	 */
 	public function runPostBuild (TaskCli $io) : void
 	{
