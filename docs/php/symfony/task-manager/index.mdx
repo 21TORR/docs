@@ -196,17 +196,17 @@ As this bundle builds on top of Symfony messages, you define your task handler a
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Torr\TaskManager\Director\TaskDirector;
 
-final readonly class PimImportMessageHandler
+final readonly class PimImportTaskHandler
 {
 	public function __construct (
 		private TaskDirector $taskDirector,
 	) {}
 
 	#[AsMessageHandler]
-	public function onPimImport (PimImportMessage $message) : void
+	public function onPimImport (PimImportTask $task) : void
 	{
 		// start the run
-		$run = $this->taskDirector->startRun($message);
+		$run = $this->taskDirector->startRun($task);
 
 		// you can get the IO from the run director
 		$io = $run->getIo();
