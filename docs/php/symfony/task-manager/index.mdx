@@ -16,24 +16,28 @@ As this bundle adds quite a lot of functionality on top of Symfonys messenger sy
 
 ## Installation
 
-First install this bundle:
+Install the bundle:
 
 ```bash
 composer require 21torr/task-manager
 ```
 
-Then configure your queues:
+If you are using Symfony Flex you are all set.
+If not, you need to create an initial configuration file like [described below](#configuration).
+
+
+## Configuration
+
+While this bundle auto-detects all queue names, you should define them manually in your config, as otherwise the priority between these queues might be wrong:
 
 ```yaml title="config/packages/task_manager.yaml"
 task_manager:
-    queues:
-        # queues sorted by priority. Highest priority at the top
-        - app_very_urgent
-        - app_urgent
-        - app
+queues:
+	# queues sorted by priority. Highest priority at the top
+	- app_very_urgent
+	- app_urgent
+	- app
 ```
-
-While this bundle auto-detects all queue names, you should define them manually in your config, as otherwise the priority between these queues might be wrong.
 
 
 ## Defining Tasks

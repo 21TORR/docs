@@ -18,31 +18,36 @@ This bundle provides helpers for
 
 ## Installation
 
-You need to define various environment variables:
-
-```dotenv
-# your space id as number
-STORYBLOK_SPACE_ID=
-
-# your management token
-STORYBLOK_MANAGEMENT_TOKEN=
-
-# your content token – with `preview` scope
-STORYBLOK_CONTENT_TOKEN=
-```
-
-Then add the base config in `config/packages/storyblok.yaml`:
-
-```yaml
-storyblok:
-    space_id: "%env(int:STORYBLOK_SPACE_ID)%"
-    management_token: "%env(STORYBLOK_MANAGEMENT_TOKEN)%"
-    content_token: "%env(STORYBLOK_CONTENT_TOKEN)%"
-```
-
-
-Then install the package:
+Install the package:
 
 ```shell
 composer require 21torr/storyblok
 ```
+
+If you are using Symfony Flex you are all set.
+
+<details>
+	<summary>Manual configuration</summary>
+
+	You need to define various environment variables:
+
+	```dotenv title=".env"
+	# your space id as number
+	STORYBLOK_SPACE_ID=
+
+	# your management token
+	STORYBLOK_MANAGEMENT_TOKEN=
+
+	# your content token – with `preview` scope
+	STORYBLOK_CONTENT_TOKEN=
+	```
+
+	Then add the base config:
+
+	```yaml title="config/packages/storyblok.yaml"
+	storyblok:
+		space_id: "%env(int:STORYBLOK_SPACE_ID)%"
+		management_token: "%env(STORYBLOK_MANAGEMENT_TOKEN)%"
+		content_token: "%env(STORYBLOK_CONTENT_TOKEN)%"
+	```
+</details>
