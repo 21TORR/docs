@@ -9,34 +9,34 @@ import {LinkList} from "../../../../src/components/Link/LinkList";
 
 The hosting bundle is a small bundle, that includes several fundamental tasks, that every project needs.
 
-
-## Add required configuration
-
-:::tip
-This config is automatically generated when using Symfony Flex.
-:::
-
-Create the env var in your `.env`:
-
-```dotenv
-HOSTING_TIER=development
-```
-
-Then create the config in `config/packages/hosting.yaml`:
-
-```yaml
-hosting:
-    # add a unique identifier of your project installation here
-    installation: 'ohai'
-    tier: '%env(HOSTING_TIER)%'
-```
-
-
 ## Installation
+
+Start with installing the package:
 
 ```shell
 composer require 21torr/hosting
 ```
+
+If you are using Symfony Flex you are all set.
+
+<details>
+	<summary>Manual configuration</summary>
+
+	Create the env var:
+
+	```dotenv title=".env"
+	HOSTING_TIER=development
+	HOSTING_INSTALLATION="add your custom key here"
+	```
+
+	Then create the config:
+
+	```yaml title="config/packages/hosting.yaml"
+	hosting:
+		tier: '%env(HOSTING_TIER)%'
+		installation: ''%env(HOSTING_INSTALLATION)%'
+	```
+</details>
 
 
 ## Setup
