@@ -147,4 +147,52 @@ class MyBuildTask implements BuildHookInterface
 ```
 
 
+### Health Checks
+
+The hosting bundle includes system to implement `live` and `ready` health checks:
+
+- **live**: The app is working correctly.
+- **ready**: The app is ready to accept connections
+
+
+These checks can be used by an Hypervisor when provisioning containers with the app. Please be aware, that failing a `live` health check will lead to the container being destroyed / restarted.
+
+:::caution
+Only issues that can be solved by a potential restart should fail the health check.
+:::
+
+e.g. failing the `live` health check due to a permanent config error will lead to your container continuously being restarted.
+
+You can integrate into the health checks with the corresponding events:
+
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Torr\Hosting\Event\HealthCheckLiveEvent;
+use Torr\Hosting\Event\HealthCheckReadyEvent;
+
+class MyHealthCheckListener
+{
+	#[AsEventListener]
+	public function onLiveCheck (HealthCheckLiveEvent $event) : void
+	{
+		// ...
+	}
+
+	#[AsEventListener]
+	public function onLiveCheck (HealthCheckReadyEvent $event) : void
+	{
+		// ...
+	}
+}
+```
+
+
+### API Endpoints
+
+After proper configuration, the bundle automatically provides two endpoints for the health checks:
+
+- `/hosting/health/live`: Liveness health check
+- `/hosting/health/ready`: Readiness health check
+
+
 [^1]: Only available if the git executable and a repository is found.
