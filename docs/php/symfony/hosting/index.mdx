@@ -146,5 +146,92 @@ class MyBuildTask implements BuildHookInterface
 }
 ```
 
+### App Validation
+
+App validation is a CLI command, that is intended to be used in your CLI, where your app can verify that the app is internally configured correctly.
+
+This can include more sophisticated checks, like checking that certain API tokens in your secrets are valid.
+
+You can integrate into the validation process with events:
+
+
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Torr\Hosting\Event\ValidateAppEvent;
+use Torr\Hosting\Hosting\HostingEnvironment;
+use Torr\Hosting\Tier\HostingTier;
+
+readonly class ValidateAppListener
+{
+
+	#[AsEventListener]
+	public function onValidateApp (ValidateAppEvent $event) : void
+	{
+		$event->markAppAsInvalid("Something is invalid");
+	}
+}
+```
+
+You can do your custom checks and mark the app as invalid. Please note that your message when marking as invalid is included in the API response, so it is public.
+
+When no check marks the app as invalid, it is assumed to be valid.
+
+:::warning
+Please note that, as this check is running the CI, the database is normally not available for doing any checks.
+:::
+
+
+### Health Checks
+
+The hosting bundle includes system to implement `live` and `ready` health checks:
+
+- **live**: The app is working correctly.
+- **ready**: The app is ready to accept connections
+
+
+These checks can be used by an Hypervisor when provisioning containers with the app. Please be aware, that failing a `live` health check will lead to the container being destroyed / restarted.
+
+:::caution
+Only issues that can be solved by a potential restart should fail the health check.
+:::
+
+e.g. failing the `live` health check due to a permanent config error will lead to your container continuously being restarted.
+
+You can integrate into the health checks with the corresponding events:
+
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Torr\Hosting\Event\HealthCheckLiveEvent;
+use Torr\Hosting\Event\HealthCheckReadyEvent;
+
+class MyHealthCheckListener
+{
+	#[AsEventListener]
+	public function onLiveCheck (HealthCheckLiveEvent $event) : void
+	{
+		// ...
+	}
+
+	#[AsEventListener]
+	public function onLiveCheck (HealthCheckReadyEvent $event) : void
+	{
+		// ...
+		$event->markAsFailed("my check failed");
+	}
+}
+```
+
+You can mark the check as failed. Please note that your message when failing the health check is included in the API response, so it is public.
+
+When no check marks anything as failed, it is assumed to be healthy.
+
+
+### API Endpoints
+
+After proper configuration, the bundle automatically provides two endpoints for the health checks:
+
+- `/hosting/health/live`: Liveness health check
+- `/hosting/health/ready`: Readiness health check
+
 
 [^1]: Only available if the git executable and a repository is found.
