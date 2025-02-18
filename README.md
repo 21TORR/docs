@@ -3,7 +3,7 @@
 
 These are the docs for our own packages and libraries. 
 
-> 🔖 **Hosted at [21torr-docs.fly.dev](https://21torr-docs.fly.dev/)**
+> 🔖 **Hosted at [21torr-docs.pages.dev](https://21torr-docs.pages.dev/)**
 
 It is built using [Docusaurus](https://docusaurus.io/).
 
