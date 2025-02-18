@@ -49,6 +49,7 @@ const config = {
 						keywords: ['best-practice'],
 						extendDefaults: true,
 					},
+					onUntruncatedBlogPosts: 'ignore',
 				},
 				theme: {
 					customCss: require.resolve('./assets/scss/custom.scss'),
