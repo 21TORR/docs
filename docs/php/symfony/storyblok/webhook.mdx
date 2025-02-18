@@ -1,0 +1,129 @@
+# Webhooks
+
+The Storyblok bundle automatically integrates in to all webhooks that are sent from Storyblok. It parses the requests, validates it and passes properly typed events with payloads to your code, to integrate into your app.
+
+## Installation
+
+After setting up the bundle routes[^1], you need to configure the webhook URL in Storyblok:
+
+```txt
+https://.../storyblok/webhook
+```
+
+
+## Webhook Secrets
+
+You should always use webhook secrets to secure your webhook endpoints. The webhooks are a public endpoint, so anyone can send arbitrary requests to it.
+
+### For Paid Plans
+
+On paid plans, you can use the native **Webhooks Secret** feature. Configure the webhook secret in Storyblok and in your bundle:
+
+```yaml title="config/packages/storyblok.yaml"
+storyblok:
+	webhook:
+		secret: "%env(STORYBLOK_WEBHOOK_SECRET)%"
+```
+
+### For Unpaid Plans
+
+Free plans (that are typically used during development) don't support proper webhook secrets, but this you can add the webhook secret to the URL.
+
+For that enable this feature:
+
+```yaml title="config/packages/storyblok.yaml"
+storyblok:
+	webhook:
+		secret: "my-secret"
+		allow_url_secret: true
+```
+
+and append the secret to your webhook endpoint URL in the config:
+
+```txt
+https://.../storyblok/webhook/my-secret
+```
+
+:::danger
+Don't forget to rotate the secret when switching from an unpaid to a paid plan. You should always use proper webhook secrets if available.
+:::
+
+
+## Usage of Webhook Events
+
+For every webhook request a `StoryblokWebhookEvent` is dispatched.
+
+It provides the webhook payload and gives you the opportunity to pass arbitrary data to the webhook endpoint response.
+
+### Webhook Payloads
+
+The webhook payload defines the type of webhook that was dispatched. Right now the following webhook payloads are implemented:
+
+| Webhook Type    | Payload                         |
+|-----------------|---------------------------------|
+| Story           | `StoryWebhookPayload`           |
+| Datasource      | `DatasourceEntryWebhookPayload` |
+| Asset           | `AssetWebhookPayload`           |
+| User management | `UserWebhookPayload`            |
+| Discussion      | *(not yet implemented)*         |
+| Workflow        | `WorkflowStageWebhookPayload`   |
+| Pipeline        | `PipelineWebhookPayload`        |
+| Release         | `ReleaseWebhookPayload`         |
+
+
+A typical implementation registers to the event and matches the payload type:
+
+```php
+use Torr\Storyblok\Event\StoryblokWebhookEvent;
+
+public function onStoryblokWebhook (StoryblokWebhookEvent $event) : void
+{
+	switch (true)
+	{
+		case $event->payload instanceof StoryWebhookPayload:
+			// ...
+			break;
+
+		case $event->payload instanceof AssetWebhookPayload:
+			// ...
+			break;
+	}
+}
+```
+
+:::caution
+The webhook event is dispatched synchronously in the webhook event handler. Make sure to always return a fast response, like just dispatching a message to the message bus.
+:::
+
+
+## Endpoint Response
+
+You can pass arbitrary response data to the `StoryblokWebhookEvent` to include in the webhook endpoint response:
+
+```php
+use Torr\Storyblok\Event\StoryblokWebhookEvent;
+
+public function onStoryblokWebhook (StoryblokWebhookEvent $event) : void
+{
+	$event->addResponseData("some-data", "test");
+}
+```
+
+Will include
+
+```json
+{
+	"some-data": "test"
+}
+```
+
+in the response.
+
+:::tip
+Make sure to include useful information in the response, as you can then debug your webhooks (and their responses) in the Storyblok UI.
+:::
+
+
+
+
+[^1]: Follow the [installation guide](./#installation). You can see the details about setting up the routing if you open the "manual installation" section.
