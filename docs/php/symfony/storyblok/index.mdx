@@ -40,6 +40,9 @@ If you are using Symfony Flex you are all set.
 
 	# your content token – with `preview` scope
 	STORYBLOK_CONTENT_TOKEN=
+
+	# the secret to validate webhooks
+	STORYBLOK_WEBHOOK_SECRET=
 	```
 
 	Then add the base config:
@@ -49,5 +52,15 @@ If you are using Symfony Flex you are all set.
 		space_id: "%env(int:STORYBLOK_SPACE_ID)%"
 		management_token: "%env(STORYBLOK_MANAGEMENT_TOKEN)%"
 		content_token: "%env(STORYBLOK_CONTENT_TOKEN)%"
+		webhook:
+			secret: "%env(STORYBLOK_WEBHOOK_SECRET)%"
+	```
+
+	and load the routing:
+
+	```yaml title="config/routes/storyblok.yaml"
+	storyblok:
+		prefix: /storyblok/
+		resource: '@TorrStoryblokBundle/config/routes.yaml'
 	```
 </details>
