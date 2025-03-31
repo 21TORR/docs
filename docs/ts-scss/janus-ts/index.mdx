@@ -1,0 +1,33 @@
+import {LinkList} from "../../../src/components/Link/LinkList";
+
+# Janus TS
+
+<LinkList
+	npm="https://www.npmjs.com/package/@21torr/janus"
+	github="https://github.com/21TORR/janus-ts"
+/>
+
+Janus is a library to provide the config for our CI / code style tools.
+It is basically a config generator for your app/library, to automatically configure `dprint`, `eslint`, `stylelint` and `typescript`.
+
+To ease configuration changes, it is a versioned package, that has a CLI to copy the config files to your project. It's your task to then merge these config changes with your customizations via Git.
+
+## Usage
+
+Install the package, then run it:
+
+```shell
+pnpm exec janus init
+```
+
+then choose your type of application.
+
+
+## Application Types
+
+The application types determine which config files to copy to your project.
+
+Right now, there are two possible options:
+
+- `next-js`
+- `library`
