@@ -313,6 +313,40 @@ Prevents wrapping of text by displaying ellipsis instead.
 
 
 ## Functions
+### Fluid
+#### `.fluid-prop()` {#functions/fluid/fluid-prop}
+
+```scss
+@include atlantis.fluid-prop($min-vw, $max-vw, $min-value, $max-value);
+```
+
+Returns a clamp function with calculated values, depending on the given params.
+
+* `$min-vw` -> viewport at which the value starts to be fluid
+* `$max-vw` -> viewport at which the value ends to be fluid
+* `$min-value` -> value at the beginning
+* `$max-value` -> value at the end
+
+Usage:
+
+```scss
+.element {
+	font-size: atlantis.fluid-prop(30rem, 140rem, 2rem, 4rem);
+}
+```
+
+We recommend for multiple uses, such as font-sizes that all have the same `$min-vw` and `$max-vw` value, to build a helper function that is then used for better readability when using the function. For example:
+
+```scss
+@function font-fluid-prop ($min-value, $max-value) {
+	@return atlantis.fluid-prop(30rem, 140rem, $min-value, $max-value);
+}
+
+.element {
+	font-size: font-fluid-prop(2rem, 4rem);
+}
+```
+
 ### SVG
 #### `.inline-svg()` {#functions/svg/inline-svg}
 
