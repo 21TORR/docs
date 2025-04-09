@@ -317,7 +317,7 @@ Prevents wrapping of text by displaying ellipsis instead.
 #### `.fluid-prop()` {#functions/fluid/fluid-prop}
 
 ```scss
-@include atlantis.fluid-prop($min-vw, $max-vw, $min-value, $max-value);
+atlantis.fluid-prop($min-vw, $max-vw, $min-value, $max-value);
 ```
 
 Returns a clamp function with calculated values, depending on the given params.
@@ -337,13 +337,19 @@ Usage:
 
 We recommend for multiple uses, such as font-sizes that all have the same `$min-vw` and `$max-vw` value, to build a helper function that is then used for better readability when using the function. For example:
 
-```scss
+```scss title="_mixins.scss"
+@use "~@21torr/atlantis/mixins" as atlantis;
+
 @function font-fluid-prop ($min-value, $max-value) {
 	@return atlantis.fluid-prop(30rem, 140rem, $min-value, $max-value);
 }
+```
+
+```scss title="element.scss"
+@use "mixins";
 
 .element {
-	font-size: font-fluid-prop(2rem, 4rem);
+	font-size: mixins.font-fluid-prop(2rem, 4rem);
 }
 ```
 
@@ -351,7 +357,7 @@ We recommend for multiple uses, such as font-sizes that all have the same `$min-
 #### `.inline-svg()` {#functions/svg/inline-svg}
 
 ```scss
-@include atlantis.inline-svg($svg);
+atlantis.inline-svg($svg);
 ```
 
 Inlines the SVG on the element. Will return a `url()` element so it can be used directly as an image.
