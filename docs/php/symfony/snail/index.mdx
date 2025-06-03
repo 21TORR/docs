@@ -1,0 +1,59 @@
+import {LinkList} from "../../../../src/components/Link/LinkList";
+
+# Snail
+
+<LinkList
+	github="https://github.com/21TORR/SnailBundle"
+	packagist="https://packagist.org/packages/21torr/snail"
+/>
+
+A bundle with helpers for using *snails*.
+
+:::tip
+A *snail* is a **slug** with a very specific format.
+:::
+
+The format of a snail is:
+
+- only lower case latin letters (`[a-z]`)
+- numbers (`[0-9]`)
+- special characters: `. _ -`
+- must not end or start on a special character
+- no consecutive multiple special characters (so no `a-_b` allowed)
+
+
+Snails are URL safe and safe to use on the CLI as key.
+
+
+## Installation
+
+Install the bundle:
+
+```bash
+composer require 21torr/snail
+```
+
+## Usage
+
+### Validating a snail
+
+```php
+use Torr\Snail\Snail\Snailer;
+
+Snailer::isValidSnail($string);
+```
+
+
+### Generating a snail
+
+You can also generate a snail from any string.
+Please note that consecutive special characters will be collapsed to the first special character (so `".-_." -> "."`).
+
+The snailer also removes all not-allowed characters. If the result will be an empty string, a `SnailGenerationFailedException` will be thrown.
+
+```php
+use Torr\Snail\Snail\Snailer;
+
+$snailer = new Snailer();
+$snailer->generateSnail($string);
+```
