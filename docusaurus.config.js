@@ -26,6 +26,11 @@ const config = {
 	},
 
 	future: {
+		v4: {
+			removeLegacyPostBuildHeadAttribute: true,
+			// disable for now, as it breaks the build
+			useCssCascadeLayers: false,
+		},
 		experimental_faster: true,
 	},
 
