@@ -213,7 +213,7 @@ class MyHealthCheckListener
 	}
 
 	#[AsEventListener]
-	public function onLiveCheck (HealthCheckReadyEvent $event) : void
+	public function onReadyCheck (HealthCheckReadyEvent $event) : void
 	{
 		// ...
 		$event->markAsFailed("my check failed");
