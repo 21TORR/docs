@@ -1,4 +1,5 @@
 import {LinkList} from "../../../../src/components/Link/LinkList";
+import {AddedBadge} from "../../../../src/components/AddedBadge";
 
 # Simple Normalizer
 
@@ -155,3 +156,35 @@ public function normalize (object $value, array $context, SimpleNormalizer $norm
 	// ...
 }
 ```
+
+
+## Returning Invalid Values
+
+<AddedBadge package="21torr/simple-normalizer" version="1.4.0" />
+
+All values in the generated JSON must be of valid JSON types, that includes: scalars, arrays and empty objects.
+
+:::info
+Empty objects are allowed, as JSON encoding an empty array[^1] will always encode to `[]`, but `json_encode(new stdClass()) === "{}"`.
+:::
+
+However, due to performance reasons, the normalizer does not check for valid values. If you return an invalid value, it will be silently ignored (and in the end passed to `json_encode()`):
+
+```php
+class MyNormalizer implements SimpleObjectNormalizerInterface
+{
+	public function normalize (object $value, array $context, SimpleNormalizer $normalizer) : mixed
+	{
+		assert($value instanceof MyObject);
+
+		// this will be silently ignored
+		return new SomeObject();
+	}
+}
+```
+
+This is never intended behavior and is now validated. This check is only enabled in `debug` mode, so you can still use the normalizer in production without performance overhead.
+
+
+
+[^1]: PHP doesn't distinguish between empty arrays and empty objects, so `json_encode` can only encode to one of them. You can configure it with the constant `JSON_FORCE_OBJECT`, but that is a global setting, and most of the time you want to have different behavior in the same normalization process.

@@ -1,0 +1,34 @@
+.container {
+}
+
+.container:has(+ *) {
+	margin-block-end: var(--ifm-paragraph-margin-bottom);
+}
+
+.badge {
+	background-color: var(--alert-added-version-background-color);
+	color: var(--alert-added-version-foreground-color);
+	box-shadow: var(--ifm-alert-shadow);
+	border-left: 5px solid var(--alert-added-version-border-color);
+	border-radius: var(--ifm-alert-border-radius);
+	padding: 5px 10px;
+	vertical-align: middle;
+	line-height: 1;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.icon {
+	flex-grow: 0;
+	flex-shrink: 0;
+	margin-inline-end: 5px;
+}
+
+.code {
+	background-color: transparent;
+	border: 0;
+	display: inline;
+	padding: 0;
+}
