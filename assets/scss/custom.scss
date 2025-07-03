@@ -20,6 +20,10 @@
 	--alert-best-practice-background-color-highlight: rgba(0, 164, 0, 0.15);
 	--alert-best-practice-foreground-color: var(--ifm-color-success-contrast-foreground);
 	--alert-best-practice-border-color: #a3148c;
+
+	--alert-added-version-background-color: #ff7400;
+	--alert-added-version-foreground-color: #190700;
+	--alert-added-version-border-color: #ff4d00;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -37,6 +41,10 @@
 	--alert-best-practice-background-color-highlight: rgba(0, 164, 0, 0.15);
 	--alert-best-practice-foreground-color: var(--ifm-color-success-contrast-foreground);
 	--alert-best-practice-border-color: #e617c3;
+
+	--alert-added-version-background-color: #ff7400;
+	--alert-added-version-foreground-color: #190700;
+	--alert-added-version-border-color: #ff4d00;
 }
 
 [data-theme='dark'],
