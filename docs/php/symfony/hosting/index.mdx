@@ -108,6 +108,11 @@ There are automatic build info integrations for the following info:
 - `git.last-tag` the latest git tag in the current branch[^1]
 - `git.commit` the HEAD commit hash[^1]
 
+You can also view the build info on the CLI:
+
+```shell
+bin/console hosting:build:info
+```
 
 
 ### Hooks
@@ -154,7 +159,6 @@ This can include more sophisticated checks, like checking that certain API token
 
 You can integrate into the validation process with events:
 
-
 ```php
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Torr\Hosting\Event\ValidateAppEvent;
@@ -179,6 +183,12 @@ When no check marks the app as invalid, it is assumed to be valid.
 :::warning
 Please note that, as this check is running the CI, the database is normally not available for doing any checks.
 :::
+
+You can run this check using:
+
+```shell
+bin/console hosting:validate-app
+```
 
 
 ### Health Checks
