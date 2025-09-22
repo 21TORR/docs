@@ -253,14 +253,27 @@ The bundle only contains the entities, no migrations. You might need to generate
 
 ## Running the Message Handler
 
-Internally the task manager uses [Symfony Messenger], so to run the tasks, you just consume the messages:
+You can run the task manager worker by using this command:
 
 ```shell
-bin/console messenger:consume $(bin/console task-manager:messenger:queue-names)
+bin/console task-manager:run-worker
 ```
+
+:::tip
+You must set up the worker using either [systemd] or [Supervisor]. Use the config from the official documentation, just replace the call to the one above.
+:::
 
 This command automatically uses the queues in the correct (by priority in descending) order.
 Schedules automatically stay at the top of the priority list.
+
+You can also pass the limit options from [Symfony Messenger]'s `consume` command:
+
+- `--limit`: Limit the number of received messages
+- `--time-limit`: The time limit in seconds the worker can handle new messages
+- `--failure-limit`: The number of failed messages the worker can consume
+- `--memory-limit`: The memory limit the worker can consume
+
+If you don't pass any limit yourself, the task manager automatically uses `--limit 5`.
 
 
 ## Debugging
@@ -272,5 +285,7 @@ bin/console task-manager:debug
 ```
 
 
-
+[Supervisor]: https://symfony.com/doc/current/messenger.html#supervisor-configuration
 [Symfony Messenger]: https://symfony.com/doc/current/messenger.html
+[systemd]: https://symfony.com/doc/current/messenger.html#systemd-configuration
+
