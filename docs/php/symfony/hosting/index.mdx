@@ -44,6 +44,9 @@ If you are using Symfony Flex you are all set.
 The bundle contains two CLI tasks, that you should integrate into your workflow:
 
 ```shell
+# This command should be run in the CI
+bin/console hosting:validate-app
+
 # This command should be run once after your build finished:
 bin/console hosting:run-tasks:post-build
 
