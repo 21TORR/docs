@@ -192,6 +192,44 @@ bin/console task-manager:queue task-id-1 task-id-2
 ```
 
 
+### Queueing Tasks After the Current Run
+
+You can also queue tasks after the current run. This is handy when dispatching tasks in a scheduler. The scheduler
+starts working on these tasks right away, but in nearly all cases you want to have these tasks in their regular queues, to be able
+to use the priority system.
+
+```php
+use Symfony\Component\Scheduler\Attribute\AsSchedule;
+use Symfony\Component\Scheduler\ScheduleProviderInterface;
+use Symfony\Component\Scheduler\Schedule;
+use Torr\TaskManager\Task\DispatchAfterRunTask\DispatchAfterRunTask;
+
+#[AsSchedule]
+class AppSchedule implements ScheduleProviderInterface
+{
+	public function getSchedule() : Schedule
+	{
+		return new Schedule()
+			// ...
+			->add(RecurringMessage::cron(
+				"*/5 * * * *",
+				// we want to redispatch the task in the scheduler
+				new DispatchAfterRunTask(
+					new DownloadExternalFilesTask(),
+				),
+			));
+	}
+}
+```
+
+
+:::warning
+Symfony has a similar feature with the [`RedispatchMessage`], however in their implementation you need to explicitly specify the queue the task should go into (otherwise it will get dropped).
+
+We want to keep using the default queue, so we have our own task for that.
+:::
+
+
 ## Task Handlers
 
 As this bundle builds on top of Symfony messages, you define your task handler as message handler:
@@ -288,4 +326,4 @@ bin/console task-manager:debug
 [Supervisor]: https://symfony.com/doc/current/messenger.html#supervisor-configuration
 [Symfony Messenger]: https://symfony.com/doc/current/messenger.html
 [systemd]: https://symfony.com/doc/current/messenger.html#systemd-configuration
-
+[`RedispatchMessage`]: https://symfony.com/doc/current/messenger.html#redispatching-a-message
