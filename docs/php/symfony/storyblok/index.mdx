@@ -18,7 +18,30 @@ This bundle provides helpers for
 
 ## Installation
 
-Install the package:
+You need to define various environment variables:
+
+```dotenv
+# your space id as number
+STORYBLOK_SPACE_ID=
+
+# your management token
+STORYBLOK_MANAGEMENT_TOKEN=
+
+# your content token – with `preview` scope
+STORYBLOK_CONTENT_TOKEN=
+```
+
+Then add the base config in `config/packages/storyblok.yaml`:
+
+```yaml
+storyblok:
+    space_id: "%env(STORYBLOK_SPACE_ID)%"
+    management_token: "%env(STORYBLOK_MANAGEMENT_TOKEN)%"
+    content_token: "%env(STORYBLOK_CONTENT_TOKEN)%"
+```
+
+
+Then install the package:
 
 ```shell
 composer require 21torr/storyblok
