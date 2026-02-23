@@ -1,4 +1,5 @@
 import {LinkList} from "../../../../src/components/Link/LinkList";
+import {AddedBadge} from "../../../../src/components/AddedBadge";
 
 # Task Manager
 
@@ -271,6 +272,51 @@ You use the `TaskDirector` to start a run for the given task. This will return a
 
 :::best-practice
 While not explicitly `->finish()`ed tasks will be handled properly, you should always `finish` all your task runs.
+:::
+
+
+## Schedules
+
+<AddedBadge package="21torr/task-manager" version="3.2.0" />
+
+The task manager also supports scheduling tasks like the Symfony scheduler.
+
+```php
+use Symfony\Component\Scheduler\Attribute\AsSchedule;
+use Symfony\Component\Scheduler\Schedule;
+use Symfony\Component\Scheduler\ScheduleProviderInterface;
+use Torr\TaskManager\Schedule\TaskScheduler;
+
+#[AsSchedule]
+class MySchedule implements ScheduleProviderInterface
+{
+	public function __construct(
+		private TaskScheduler $taskScheduler,
+	) {}
+
+	public function getSchedule() : Schedule
+	{
+		return $this->taskScheduler->createSchedule()
+			->cron("* * * * *", new Task1())
+			->every("10 seconds", new Task2())
+			->getSchedule();
+	}
+}
+```
+
+This automatically registers these tasks for the next regular messenger work run, so they are not being worked on right away.
+
+
+### `DispatchAfterRunTask`
+
+If you want to dispatch tasks after the current run, you can use the `DispatchAfterRunTask`.
+This is especially useful for tasks that are scheduled via the scheduler, as the scheduler normally starts working on these tasks right away.
+This way the priority system is circumvented.
+
+Normally, this is not desired, so you should use this helper task.
+
+:::info
+The `TaskScheduler` automatically wraps all provided tasks in `DispatchAfterRunTask`.
 :::
 
 
