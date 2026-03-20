@@ -1,0 +1,28 @@
+---
+sidebar_position: 13
+---
+
+# ID Slug Mapper
+
+The ID Slug Mapper is available on the adapter as:
+
+```php
+$appStoryblok->idSlugMapper
+```
+
+Use it to resolve a full slug from a Storyblok id or uuid.
+
+## Main Method
+
+### `getFullSlugById()`
+
+Returns the full slug for the given story id or uuid.
+If the id is unknown, it returns `null`.
+
+```php
+$appStoryblok->idSlugMapper->getFullSlugById("123456789");
+```
+
+```php
+$appStoryblok->idSlugMapper->getFullSlugById("95c8d1da-0f48-41f9-a376-c7bb8f72f23f");
+```

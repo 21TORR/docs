@@ -1,0 +1,140 @@
+---
+sidebar_position: 12
+---
+
+# Management API
+
+The Management API is available on the adapter as:
+
+```php
+$appStoryblok->managementApi
+```
+
+Use it for write operations and administration tasks in the configured Storyblok space.
+
+## Main Methods
+
+### `syncComponent()`
+
+Creates or updates a component definition.
+
+```php
+$appStoryblok->managementApi->syncComponent($componentConfig);
+```
+
+### `getOrCreatedComponentGroupUuid()`
+
+Resolves or creates a component group uuid.
+
+```php
+$appStoryblok->managementApi->getOrCreatedComponentGroupUuid("Content");
+```
+
+### `fetchAllRegisteredComponents()`
+
+Returns all component keys currently registered in the space.
+
+```php
+$appStoryblok->managementApi->fetchAllRegisteredComponents();
+```
+
+### `fetchComponentDefinitions()`
+
+Fetches all component definitions.
+
+```php
+$appStoryblok->managementApi->fetchComponentDefinitions();
+```
+
+### `syncDatasourceEntries()`
+
+Syncs datasource entries from your local mapping.
+
+```php
+$appStoryblok->managementApi->syncDatasourceEntries("countries", $values);
+```
+
+### `fetchDatasourceEntries()`
+
+Fetches datasource entries via the Management API.
+
+```php
+$appStoryblok->managementApi->fetchDatasourceEntries("countries");
+```
+
+### `fetchAllAssets()`
+
+Fetches metadata of all assets.
+
+```php
+$appStoryblok->managementApi->fetchAllAssets();
+```
+
+### `updateAsset()`
+
+Updates an asset by id.
+
+```php
+$appStoryblok->managementApi->updateAsset($assetId, $payload);
+```
+
+### `fetchAssetFolders()`
+
+Fetches the full asset folder tree.
+
+```php
+$appStoryblok->managementApi->fetchAssetFolders();
+```
+
+### `fetchAssetData()`
+
+Fetches metadata for a specific asset id.
+
+```php
+$appStoryblok->managementApi->fetchAssetData($assetId);
+```
+
+### `exportTranslationsXmlFile()`
+
+Exports the translation XML for a story.
+
+```php
+$appStoryblok->managementApi->exportTranslationsXmlFile($storyId);
+```
+
+### `importTranslationsXmlFile()`
+
+Imports translation XML for a story.
+
+```php
+$appStoryblok->managementApi->importTranslationsXmlFile($storyId, $xmlContent);
+```
+
+### `fetchStory()`
+
+Fetches a raw management API story payload by story id.
+
+```php
+$appStoryblok->managementApi->fetchStory($storyId);
+```
+
+### `updateStory()`
+
+Updates a story by story id.
+
+```php
+$appStoryblok->managementApi->updateStory($storyId, $storyJson);
+```
+
+### `sendRequest()`
+
+Low-level method to send arbitrary requests to the Storyblok Management API.
+
+```php
+$appStoryblok->managementApi->sendRequest("components");
+```
+
+## Deprecated
+
+`fetchFolderTitleMap()` and `fetchFoldersInPath()` are deprecated in `ManagementApi`.  
+Use the Content API equivalents instead.
