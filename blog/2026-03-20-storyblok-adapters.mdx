@@ -4,7 +4,19 @@ authors: [jannik]
 tags: [storyblok, symfony]
 ---
 
-The Storyblok docs were updated for the adapter system, including [adapter setup and configuration][1], updated [installation docs][2], and adapter-aware [CLI][3] and [webhook][4] docs. The adapter setup example now uses `AppStoryblokAdapter` with constructor-based env autowiring and sensitive token parameters. The webhook docs now use simplified `AppStoryblokAdapter` examples for paid and unpaid plans. The adapter docs now include all provided adapter services with purpose and usage examples, with plain-text service headlines and minimal access-only code snippets. Dedicated pages were added for [Content API][5], [Management API][6], [ID Slug Mapper][7], and [Request Validator][8], and linked directly below each service headline in the adapter docs.
+The Storyblok docs now include a complete guide for the adapter-based setup.
+
+## New Documentation
+
+- [Adapters guide][1] with setup, configuration and usage.
+- Dedicated docs for [Content API][5], [Management API][6], [ID Slug Mapper][7], and [Request Validator][8].
+
+## Updated Existing Pages
+
+- [Storyblok installation page][2] now reflects the adapter-based flow.
+- [CLI docs][3] now describe adapter-scoped commands.
+- [Webhook docs][4] now use `AppStoryblokAdapter` examples
+
 
 [1]: /docs/php/symfony/storyblok/adapters
 [2]: /docs/php/symfony/storyblok
