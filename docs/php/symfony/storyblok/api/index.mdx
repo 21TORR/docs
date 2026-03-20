@@ -1,0 +1,89 @@
+# API
+
+Besides the [content api] and [management api], it is recommended to add a storyblok API, which is a wrapper for the content api and helps with purpose-built fetch methods.
+
+This way all your knowledge about the structure and types of your Storyblok space are encapsulated in one place.
+
+
+```php
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
+
+#[Exclude]
+class AppStoryblokApi
+{
+	public function __construct (
+		private readonly ContentApi $contentApi,
+	) {}
+
+	/**
+	 * @return NewsStory[]
+	 */
+	public function fetchNews (string $pageTree, string $locale)
+	{
+		return $this->contentApi->fetchStories(
+			storyType: NewsStory::class,
+			slug: \sprintf("%s/%s/news/*", $pageTree, $locale),
+			version: $version,
+		);
+	}
+}
+```
+
+Wire it up in your adapter:
+
+```php
+class AppStoryblokAdapter
+{
+	public readonly AppStoryblokApi $api;
+
+	public function __construct (...)
+	{
+		$this->api = new AppStoryblokApi($this->contentApi);
+	}
+```
+
+And use it like this:
+
+```php
+$appStoryblok->api->fetchNews("website", "de-de")
+```
+
+## Caching
+
+If your API client is caching, you need to reset the cache regularly. As the API is not a service itself but just wrapped inside the adapter, you need to forward the call.
+
+First mark your adapter as resettable:
+
+```php
+use Symfony\Contracts\Service\ResetInterface;
+
+class AppStoryblokAdapter extends AbstractStoryblokAdapter implements ResetInterface
+{
+	public readonly AppStoryblokApi $api;
+
+	public function reset ()
+	{
+		$this->api->reset();
+	}
+}
+```
+
+Then implement the cache reset in your API client:
+
+```php
+use Symfony\Contracts\Service\ResetInterface;
+
+class AppStoryblokApi implements ResetInterface
+{
+	public function reset ()
+	{
+		$this->cache = [];
+	}
+}
+```
+
+
+
+
+[content api]: ./content-api
+[management api]: ./management-api
