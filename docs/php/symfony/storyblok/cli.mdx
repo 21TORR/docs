@@ -57,3 +57,6 @@ You can pass `--force` to automatically confirm the command. This can be used to
 :::caution
 `--force` is only allowed in production.
 :::
+
+On successful sync, the bundle dispatches `StoryblokDefinitionsSyncedEvent`.
+See [Definitions Synced Event](./definitions-synced-event) for listener setup.

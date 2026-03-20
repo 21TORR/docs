@@ -1,0 +1,27 @@
+---
+sidebar_position: 15
+---
+
+# Backend Edit URL Helper
+
+`StoryblokBackendUrlGenerator` generates Storyblok backend edit links.
+
+## Usage
+
+Inject the helper:
+
+```php
+StoryblokBackendUrlGenerator $backendUrlGenerator
+```
+
+Generate edit URL by story object:
+
+```php
+$backendUrlGenerator->generateStoryEditUrl($story);
+```
+
+Generate edit URL by story id and space id:
+
+```php
+$backendUrlGenerator->generateStoryEditUrlById(123456, "98765");
+```
