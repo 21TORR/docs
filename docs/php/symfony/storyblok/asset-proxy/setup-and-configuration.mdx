@@ -1,0 +1,55 @@
+---
+sidebar_position: 10
+---
+
+# Setup and Configuration
+
+## Routing
+
+Load the bundle routes so the asset proxy endpoint is available:
+
+```yaml title="config/routes/storyblok.yaml"
+storyblok:
+	prefix: /storyblok/
+	resource: "@TorrStoryblokBundle/config/routes.yaml"
+```
+
+The proxy route is:
+
+```txt
+/storyblok/asset/{spaceId}/{path}
+```
+
+## Storage Path
+
+By default, proxied files are stored in:
+
+```txt
+%kernel.project_dir%/var/storyblok/assets
+```
+
+You can override this path via service configuration:
+
+```yaml title="config/services.yaml"
+services:
+	Torr\Storyblok\Assets\Proxy\AssetProxy:
+		arguments:
+			$storagePath: "%kernel.project_dir%/var/custom-storyblok-assets"
+```
+
+## Webhook Integration for Cache Invalidation
+
+Asset proxy cache invalidation is triggered by asset webhooks:
+
+- `AssetReplaced`
+- `AssetDeleted`
+
+So make sure your Storyblok webhook is configured and asset events are enabled.
+
+## Clearing the Proxy Cache
+
+Clear all cached proxy files:
+
+```bash
+bin/console storyblok:assets:clear-proxy-storage
+```
