@@ -19,12 +19,32 @@ You should always use webhook secrets to secure your webhook endpoints. The webh
 
 On paid plans, you can use the native **Webhooks Secret** feature. Configure the webhook secret in Storyblok and in your bundle:
 
-```yaml title="config/services.yaml"
-services:
-	storyblok.config.main:
-		class: Torr\Storyblok\Config\StoryblokConfig
-		arguments:
-			$webhookSecret: "%env(STORYBLOK_MAIN_WEBHOOK_SECRET)%"
+```php
+<?php declare(strict_types=1);
+
+namespace App\Storyblok\Adapter;
+
+final class AppStoryblokAdapter extends AbstractStoryblokAdapter
+{
+	public function __construct (
+		ContainerInterface $locator,
+		#[\SensitiveParameter]
+		#[Autowire(env: "STORYBLOK_APP_WEBHOOK_SECRET")]
+		string $webhookSecret,
+		// ...
+	)
+	{
+		parent::__construct(
+			$locator,
+			new StoryblokConfig(
+				webhookSecret: $webhookSecret,
+				// ...
+			),
+		);
+	}
+
+	// ...
+}
 ```
 
 ### For Unpaid Plans
@@ -33,13 +53,11 @@ Free plans (that are typically used during development) don't support proper web
 
 For that enable this feature:
 
-```yaml title="config/services.yaml"
-services:
-	storyblok.config.main:
-		class: Torr\Storyblok\Config\StoryblokConfig
-		arguments:
-			$webhookSecret: "my-secret"
-			$allowUrlWebhookSecret: true
+```php
+new StoryblokConfig(
+	webhookSecret: $webhookSecret,
+	allowUrlWebhookSecret: true,
+)
 ```
 
 and append the secret to your webhook endpoint URL in the config:
