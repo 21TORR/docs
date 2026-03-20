@@ -102,27 +102,61 @@ Adapter keys must be unique and must be valid ["snail"][snail] strings.
 
 ## Provided Services
 
-<!-- todo: add the info here -->
+On the adapter, you have access to different services for this specific Storyblok space:
+
+
+### Content API
+
+Fetch and transform Storyblok content data (for example stories, links and space data).
+
+```php
+$appStoryblok->contentApi
+```
+
+### Management API
+
+Manage your Storyblok space via the Management API, for example when syncing component definitions.
+
+```php
+$appStoryblok->managementApi
+```
+
+### ID Slug Mapper
+
+Resolve between Story IDs and slugs using the content API.
+
+```php
+$appStoryblok->idSlugMapper
+```
+
+### Request Validator
+
+Validate incoming webhook requests against your adapter webhook configuration.
+
+```php
+$appStoryblok->requestValidator
+```
 
 
 
 ## Usage
 
-If you know, which Storyblok adapter you want to use, you can just inject it directly:
+If you know which Storyblok adapter you want to use, you can inject it directly:
 
 ```php
-public function __construct (
-	AppStoryblokAdapter $storyblok,
-) {}
+function example (AppStoryblokAdapter $storyblok)
+{
+	$storyblok->...
+}
 ```
 
 Sometimes you need to fetch the storyblok depending on a dynamic value, so you need to use the `StoryblokAdapterRegistry` for that:
 
 ```php
-public function example (StoryblokAdapterRegistry $registry)
+function example (StoryblokAdapterRegistry $registry)
 {
 	$registry->getByKey("app");
-	$registry->getByKey("123456");
+	$registry->getBySpaceId("123456");
 }
 ```
 
