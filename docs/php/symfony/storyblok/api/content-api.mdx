@@ -1,0 +1,83 @@
+# Content API
+
+The Content API is available on the adapter as:
+
+```php
+$appStoryblok->contentApi
+```
+
+Use it to fetch and hydrate Storyblok content for the configured adapter space.
+
+## Main Methods
+
+### `fetchSingleStory()`
+
+Fetches a single story by slug, id or uuid.
+
+```php
+$appStoryblok->contentApi->fetchSingleStory("home");
+```
+
+### `fetchStories()`
+
+Fetches stories for a specific story class.
+
+```php
+$appStoryblok->contentApi->fetchStories(PageStory::class, "pages/*");
+```
+
+### `fetchAllStories()`
+
+Fetches all stories (optionally filtered by slug pattern).
+
+```php
+$appStoryblok->contentApi->fetchAllStories("pages/*");
+```
+
+### `getSpaceInfo()`
+
+Returns metadata for the current Storyblok space.
+
+```php
+$appStoryblok->contentApi->getSpaceInfo();
+```
+
+### `fetchDatasourceEntries()`
+
+Fetches datasource entries from the Content API.
+
+```php
+$appStoryblok->contentApi->fetchDatasourceEntries("countries");
+```
+
+### `fetchFoldersInPath()`
+
+Fetches folders below a slug prefix.
+
+```php
+$appStoryblok->contentApi->fetchFoldersInPath("pages");
+```
+
+### `fetchFolderTitleMap()`
+
+Fetches a map of local folder URL to folder title.
+
+```php
+$appStoryblok->contentApi->fetchFolderTitleMap("pages");
+```
+
+### `fetchAllLinks()`
+
+Fetches all Storyblok links.
+
+```php
+$appStoryblok->contentApi->fetchAllLinks();
+```
+
+### `fetchSignedAssetUrl()`
+
+Fetches signed asset data for private assets.
+
+```php
+$appStoryblok->contentApi->fetchSignedAssetUrl("https://a.storyblok.com/f/...");
+```

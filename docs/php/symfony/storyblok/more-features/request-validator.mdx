@@ -1,0 +1,24 @@
+# Request Validator
+
+The request validator is available on the adapter as:
+
+```php
+$appStoryblok->requestValidator
+```
+
+Use it to validate incoming Storyblok webhook requests for the configured adapter.
+
+## Main Method
+
+### `isValidRequest()`
+
+Validates the request based on your adapter webhook config:
+
+- webhook signature (`webhook-signature`) for paid plans
+- optional URL secret fallback for unpaid plans (`allowUrlWebhookSecret`)
+
+```php
+$appStoryblok->requestValidator->isValidRequest($request, $urlSecret);
+```
+
+If both signature and URL secret are present at the same time, validation fails.

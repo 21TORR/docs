@@ -1,0 +1,171 @@
+---
+sidebar_position: -1
+---
+
+# Adapters
+
+The Storyblok bundle uses adapters to connect to one or multiple Storyblok spaces.
+Each adapter is meant to connect to a single Storyblok space, configured via `StoryblokConfig`.
+
+
+## Setup
+
+Create one adapter class per Storyblok space:
+
+```php title="src/Storyblok/Adapter/AppStoryblokAdapter.php"
+<?php declare(strict_types=1);
+
+namespace App\Storyblok\Adapter;
+
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Torr\Storyblok\Adapter\AbstractStoryblokAdapter;
+use Torr\Storyblok\Config\StoryblokConfig;
+
+final class AppStoryblokAdapter extends AbstractStoryblokAdapter
+{
+	public function __construct (
+		ContainerInterface $locator,
+		#[Autowire(env: "STORYBLOK_APP_SPACE_ID")]
+		string $spaceId,
+		#[\SensitiveParameter]
+		#[Autowire(env: "STORYBLOK_APP_MANAGEMENT_TOKEN")]
+		string $managementToken,
+		#[\SensitiveParameter]
+		#[Autowire(env: "STORYBLOK_APP_CONTENT_TOKEN")]
+		string $contentToken,
+		#[\SensitiveParameter]
+		#[Autowire(env: "default::STORYBLOK_APP_WEBHOOK_SECRET")]
+		?string $webhookSecret,
+	)
+	{
+		parent::__construct(
+			$locator,
+			new StoryblokConfig(
+				spaceId: $spaceId,
+				managementToken: $managementToken,
+				contentToken: $contentToken,
+				webhookSecret: $webhookSecret,
+			),
+		);
+	}
+
+	#[\Override]
+	public static function getKey () : string
+	{
+		return "app";
+	}
+
+	#[\Override]
+	public function getDisplayName () : string
+	{
+		return "App Website";
+	}
+
+	#[\Override]
+	public function getStandaloneComponentKeys () : array
+	{
+		return [
+			PageComponent::getKey(),
+			NewsEntryComponent::getKey(),
+		];
+	}
+}
+```
+
+Also define the env vars for this adapter in your `.env` file:
+
+```dotenv title=".env"
+STORYBLOK_APP_SPACE_ID=
+STORYBLOK_APP_MANAGEMENT_TOKEN=
+STORYBLOK_APP_CONTENT_TOKEN=
+STORYBLOK_APP_WEBHOOK_SECRET=
+```
+
+:::info
+Adapter keys must be unique and must be valid ["snail"][snail] strings.
+:::
+
+
+## Configuration
+
+`StoryblokConfig` supports these options:
+
+- `$spaceId` (required): numeric Storyblok space id as string.
+- `$managementToken` (required): management API token.
+- `$contentToken` (required): content API token.
+- `$localeLevel` (optional, default `0`): 0-based slug level where locales are defined.
+- `$webhookSecret` (optional): secret for webhook signature validation.
+- `$allowUrlWebhookSecret` (optional, default `false`): allow URL-based secret fallback (for free Storyblok plans).
+- `$assetToken` (optional): token for signed asset URLs.
+
+
+## Provided Services
+
+On the adapter, you have access to different services for this specific Storyblok space:
+
+
+### Content API
+
+[Content API docs](./api/content-api)
+
+Fetch and transform Storyblok content data (for example stories, links and space data).
+
+```php
+$appStoryblok->contentApi
+```
+
+### Management API
+
+[Management API docs](./api/management-api)
+
+Manage your Storyblok space via the Management API, for example when syncing component definitions.
+
+```php
+$appStoryblok->managementApi
+```
+
+### ID Slug Mapper
+
+[ID Slug Mapper docs](./more-features/id-slug-mapper)
+
+Resolve between Story IDs and slugs using the content API.
+
+```php
+$appStoryblok->idSlugMapper
+```
+
+### Request Validator
+
+[Request Validator docs](./more-features/request-validator)
+
+Validate incoming webhook requests against your adapter webhook configuration.
+
+```php
+$appStoryblok->requestValidator
+```
+
+
+
+## Usage
+
+If you know which Storyblok adapter you want to use, you can inject it directly:
+
+```php
+function example (AppStoryblokAdapter $storyblok)
+{
+	$storyblok->...
+}
+```
+
+Sometimes you need to fetch the storyblok depending on a dynamic value, so you need to use the `StoryblokAdapterRegistry` for that:
+
+```php
+function example (StoryblokAdapterRegistry $registry)
+{
+	$registry->getByKey("app");
+	$registry->getBySpaceId("123456");
+}
+```
+
+[snail]: /docs/php/symfony/snail/

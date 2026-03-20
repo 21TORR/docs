@@ -1,0 +1,17 @@
+# Asset Proxy
+
+The Storyblok Asset Proxy lets your application serve Storyblok assets through your own app URL.
+
+Instead of directly serving `https://a.storyblok.com/...`, the URL is rewritten to your app, signed, and cached on disk.
+
+## What This Means for Your Application
+
+- Asset URLs are served from your application domain.
+- Asset files are cached locally in `var/storyblok/assets` by default.
+- Replaced and deleted assets are automatically invalidated when asset webhooks are enabled.
+- Proxy URLs are signed, so only valid generated URLs are accepted.
+
+## Pages
+
+- [Setup and Configuration](./setup-and-configuration)
+- [Usage](./usage)

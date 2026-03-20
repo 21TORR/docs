@@ -1,0 +1,42 @@
+---
+sidebar_position: 20
+---
+
+# Usage
+
+## Rewriting Asset URLs
+
+Use `AssetProxyUrlGenerator` to rewrite Storyblok asset URLs to signed proxy URLs:
+
+```php
+$assetProxyUrlGenerator->rewriteAssetUrl($storyblokAssetUrl);
+```
+
+If the URL is not a Storyblok asset URL, it is returned unchanged.
+
+## Request Flow
+
+1. Your app generates a signed proxy URL.
+2. The request hits `/storyblok/asset/{spaceId}/{path}`.
+3. The signature is validated.
+4. If the file is not cached, it is downloaded from Storyblok and stored locally.
+5. The cached file is streamed to the response.
+
+If the URL signature is invalid, the proxy returns `404`.
+
+## Download Behavior
+
+You can force file download by adding `download` as query parameter:
+
+```txt
+?download=1
+```
+
+Without it, files are returned as inline responses.
+
+## Application Impact
+
+- First request for an asset path is slower (cache miss + download).
+- Following requests are faster (local file hit).
+- Disk usage grows with cached assets.
+- Webhook invalidation keeps replaced/deleted assets fresh.

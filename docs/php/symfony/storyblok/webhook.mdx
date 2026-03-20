@@ -4,10 +4,10 @@ The Storyblok bundle automatically integrates in to all webhooks that are sent f
 
 ## Installation
 
-After setting up the bundle routes[^1], you need to configure the webhook URL in Storyblok:
+After setting up the bundle routes[^1] and your Storyblok adapter[^2], configure the webhook URL in Storyblok:
 
 ```txt
-https://.../storyblok/webhook
+https://.../storyblok/webhook/<adapter-key>
 ```
 
 
@@ -19,10 +19,32 @@ You should always use webhook secrets to secure your webhook endpoints. The webh
 
 On paid plans, you can use the native **Webhooks Secret** feature. Configure the webhook secret in Storyblok and in your bundle:
 
-```yaml title="config/packages/storyblok.yaml"
-storyblok:
-	webhook:
-		secret: "%env(STORYBLOK_WEBHOOK_SECRET)%"
+```php
+<?php declare(strict_types=1);
+
+namespace App\Storyblok\Adapter;
+
+final class AppStoryblokAdapter extends AbstractStoryblokAdapter
+{
+	public function __construct (
+		ContainerInterface $locator,
+		#[\SensitiveParameter]
+		#[Autowire(env: "STORYBLOK_APP_WEBHOOK_SECRET")]
+		string $webhookSecret,
+		// ...
+	)
+	{
+		parent::__construct(
+			$locator,
+			new StoryblokConfig(
+				webhookSecret: $webhookSecret,
+				// ...
+			),
+		);
+	}
+
+	// ...
+}
 ```
 
 ### For Unpaid Plans
@@ -31,17 +53,17 @@ Free plans (that are typically used during development) don't support proper web
 
 For that enable this feature:
 
-```yaml title="config/packages/storyblok.yaml"
-storyblok:
-	webhook:
-		secret: "my-secret"
-		allow_url_secret: true
+```php
+new StoryblokConfig(
+	webhookSecret: $webhookSecret,
+	allowUrlWebhookSecret: true,
+)
 ```
 
 and append the secret to your webhook endpoint URL in the config:
 
 ```txt
-https://.../storyblok/webhook/my-secret
+https://.../storyblok/webhook/<adapter-key>/my-secret
 ```
 
 :::danger
@@ -127,3 +149,4 @@ Make sure to include useful information in the response, as you can then debug y
 
 
 [^1]: Follow the [installation guide](./#installation). You can see the details about setting up the routing if you open the "manual installation" section.
+[^2]: See [adapter setup](./adapters#setup).

@@ -1,0 +1,29 @@
+# Definitions Synced Event
+
+After a successful `storyblok:definitions:sync`, the bundle dispatches `StoryblokDefinitionsSyncedEvent`.
+
+## Event Data
+
+The event provides:
+
+- `io`: `TorrStyle` instance used by the sync command.
+- `adapter`: the adapter that was synced.
+
+## Listener Example
+
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Torr\Storyblok\Event\StoryblokDefinitionsSyncedEvent;
+
+#[AsEventListener]
+public function onDefinitionsSynced (StoryblokDefinitionsSyncedEvent $event) : void
+{
+	$event->io->writeln("Run post-sync work...");
+	$event->adapter->managementApi;
+}
+```
+
+## Notes
+
+- If multiple adapters are synced in one command run, one event is dispatched per adapter.
+- The event is only dispatched on successful sync.
