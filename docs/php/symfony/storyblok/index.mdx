@@ -18,31 +18,6 @@ This bundle provides helpers for
 
 ## Installation
 
-You need to define various environment variables:
-
-```dotenv
-# your space id as number
-STORYBLOK_SPACE_ID=
-
-# your management token
-STORYBLOK_MANAGEMENT_TOKEN=
-
-# your content token – with `preview` scope
-STORYBLOK_CONTENT_TOKEN=
-```
-
-Then add the base config in `config/packages/storyblok.yaml`:
-
-```yaml
-storyblok:
-    space_id: "%env(STORYBLOK_SPACE_ID)%"
-    management_token: "%env(STORYBLOK_MANAGEMENT_TOKEN)%"
-    content_token: "%env(STORYBLOK_CONTENT_TOKEN)%"
-```
-
-
-Then install the package:
-
 ```shell
 composer require 21torr/storyblok
 ```
@@ -52,34 +27,7 @@ If you are using Symfony Flex you are all set.
 <details>
 	<summary>Manual configuration</summary>
 
-	You need to define various environment variables:
-
-	```dotenv title=".env"
-	# your space id as number
-	STORYBLOK_SPACE_ID=
-
-	# your management token
-	STORYBLOK_MANAGEMENT_TOKEN=
-
-	# your content token – with `preview` scope
-	STORYBLOK_CONTENT_TOKEN=
-
-	# the secret to validate webhooks
-	STORYBLOK_WEBHOOK_SECRET=
-	```
-
-	Then add the base config:
-
-	```yaml title="config/packages/storyblok.yaml"
-	storyblok:
-		space_id: "%env(int:STORYBLOK_SPACE_ID)%"
-		management_token: "%env(STORYBLOK_MANAGEMENT_TOKEN)%"
-		content_token: "%env(STORYBLOK_CONTENT_TOKEN)%"
-		webhook:
-			secret: "%env(STORYBLOK_WEBHOOK_SECRET)%"
-	```
-
-	and load the routing:
+	Load the routing:
 
 	```yaml title="config/routes/storyblok.yaml"
 	storyblok:
@@ -87,3 +35,10 @@ If you are using Symfony Flex you are all set.
 		resource: '@TorrStoryblokBundle/config/routes.yaml'
 	```
 </details>
+
+## Adapter Setup
+
+The bundle is adapter-based.
+You create one adapter per Storyblok space and configure each adapter with its own `StoryblokConfig`.
+
+Continue with the [adapter guide](./adapters) for setup, usage and configuration details.
