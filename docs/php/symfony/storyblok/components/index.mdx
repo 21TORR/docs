@@ -210,3 +210,37 @@ class PageStory extends Story
 	}
 }
 ```
+
+### Story Metadata
+
+Every story also contains metadata from Storyblok that you can access via `getMetaData()`.
+
+```php
+$metaData = $story->getMetaData();
+```
+
+`StoryMetaData` provides these accessors:
+
+| Method / Property                 | Description                                                                                         |
+|-----------------------------------|-----------------------------------------------------------------------------------------------------|
+| `spaceId`                         | Storyblok space id of the current story.                                                            |
+| `getType()`                       | Component key (document type) of the story.                                                         |
+| `getId()`                         | Numeric story id.                                                                                   |
+| `getUuid()`                       | Stable UUID of the story.                                                                           |
+| `getName()`                       | Display name of the story in Storyblok.                                                             |
+| `getSlug()`                       | Last slug segment (without parent path).                                                            |
+| `getFullSlug()`                   | Full story slug path.                                                                               |
+| `getParentSlug()`                 | Parent slug path without trailing slash, or `null` for root entries.                                |
+| `getSlugSegments()`               | Full slug split into path segments.                                                                 |
+| `getLocale()`                     | Locale as provided by Storyblok (`lang`). Normally just `"Default"`, as we don't use these locales. |
+| `getLocaleFromSlug()`             | Locale inferred from slug / folder at the configured locale level, if valid.                        |
+| `getCreatedAt()`                  | Creation timestamp (`DateTimeImmutable`).                                                           |
+| `getFirstPublishedAt()`           | First publish timestamp or `null` if never published.                                               |
+| `getPublishedAt()`                | Latest publish timestamp or `null` if not published.                                                |
+| `isStartPage()`                   | Whether this story is marked as start page.                                                         |
+| `getPosition()`                   | Optional folder position used for sorting in Storyblok.                                             |
+| `getAlternateLanguages()`         | Raw alternate language entries including inferred locale.                                           |
+| `getTranslatedDocumentsMapping()` | Locale-to-full-slug mapping for translated alternates.                                              |
+| `getPreviewData()`                | Raw `_editable` preview marker used for Storyblok visual editing.                                   |
+
+This is useful for routing, locale switching and backend preview integrations.
