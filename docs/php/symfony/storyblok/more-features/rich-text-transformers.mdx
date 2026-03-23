@@ -1,0 +1,37 @@
+# Rich Text Transformers
+
+The bundle ships additional helpers for converting between Storyblok Rich Text JSON and HTML.
+
+These are mainly useful when integrating translation flows or content migrations.
+
+## `RichTextHtmlTransformer`
+
+This helper converts in both directions:
+
+- Rich Text JSON markup to HTML
+- HTML to Rich Text JSON markup
+- Rich Text JSON markup to plain text
+
+```php
+use Torr\Storyblok\Tiptap\Transformer\RichTextHtmlTransformer;
+
+public function example (RichTextHtmlTransformer $transformer) : void
+{
+	$html = $transformer->transformToHtml($jsonMarkup);
+	$json = $transformer->transformToJsonMarkup($html);
+	$text = $transformer->transformToPlainText($jsonMarkup);
+}
+```
+
+## `HtmlToRichTextTransformer`
+
+If you only need one-way conversion from HTML to Rich Text array data (for example while migrating old text data), you can use:
+
+```php
+use Torr\Storyblok\RichText\HtmlToRichTextTransformer;
+
+$data = (new HtmlToRichTextTransformer())
+	->parseHtmlToRichText("<p>Hello</p>");
+```
+
+The method returns Rich Text data as array or `null` if the input could not be parsed.

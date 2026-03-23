@@ -81,3 +81,30 @@ Fetches signed asset data for private assets.
 ```php
 $appStoryblok->contentApi->fetchSignedAssetUrl("https://a.storyblok.com/f/...");
 ```
+
+## Version / Release State
+
+Most content fetch methods accept a `ReleaseVersion` argument as last parameter and default to `ReleaseVersion::PUBLISHED`.
+
+```php
+use Torr\Storyblok\Release\ReleaseVersion;
+
+$appStoryblok->contentApi->fetchSingleStory(
+	identifier: "home",
+	version: ReleaseVersion::DRAFT,
+);
+
+// you can also create the version from a preview flag:
+
+ReleaseVersion::fromPreviewFlag(true);
+```
+
+This is supported for:
+
+- `fetchSingleStory()`
+- `fetchStories()`
+- `fetchAllStories()`
+- `fetchDatasourceEntries()`
+- `fetchFoldersInPath()`
+- `fetchFolderTitleMap()`
+- `fetchAllLinks()`
