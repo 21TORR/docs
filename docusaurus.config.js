@@ -7,7 +7,7 @@ const {themes} = require('prism-react-renderer');
 const config = {
 	title: '21TORR Docs',
 	tagline: 'The documentation for all our tools',
-	url: 'https://21torr-docs.fly.dev/',
+	url: 'https://21torr-docs.pages.dev/',
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'throw',
