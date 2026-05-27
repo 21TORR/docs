@@ -59,7 +59,7 @@ Returning an error can look like this:
 return (new ApiResponse(422, [
 	"formErrors" => ...,
 ]))
-	->withStatusCode("invalid-request");
+	->withError("invalid-request", "user readable error message");
 ```
 
 An error response can also return `data`, like proper error messages, form errors, etc
@@ -67,3 +67,33 @@ An error response can also return `data`, like proper error messages, form error
 :::tip
 The `ok` parameter will be automatically determined by whether the status code is a 2xx success code.
 :::
+
+## Methods
+
+### `withError()`
+
+Sets the machine-readable error key (`error`) and an optional user-readable message (`errorMessage`).
+
+```php
+return (new ApiResponse(422, [
+	"formErrors" => $this->normalizeFormErrors($form),
+]))
+	->withError("invalid-form", "Please check the form fields.");
+```
+
+### `isOk()`
+
+Returns whether the response status code is in the `2xx` range.
+
+```php
+$response = new ApiResponse(204);
+$isSuccess = $response->isOk(); // true
+```
+
+### `error()`
+
+Static shortcut to create an error response with an error key and optional status code.
+
+```php
+return ApiResponse::error("not-found", 404);
+```

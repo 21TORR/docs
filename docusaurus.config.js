@@ -10,12 +10,17 @@ const config = {
 	url: 'https://21torr-docs.pages.dev/',
 	baseUrl: '/',
 	onBrokenLinks: 'throw',
-	onBrokenMarkdownLinks: 'throw',
 	favicon: 'img/favicon.ico',
 
 	plugins: [
 		'docusaurus-plugin-sass',
 	],
+
+	markdown: {
+		hooks: {
+			onBrokenMarkdownLinks: 'throw',
+		},
+	},
 
 	// Even if you don't use internalization, you can use this field to set useful
 	// metadata like html lang. For example, if your site is Chinese, you may want
@@ -31,7 +36,7 @@ const config = {
 			// disable for now, as it breaks the build
 			useCssCascadeLayers: false,
 		},
-		experimental_faster: true,
+		faster: true,
 	},
 
 	presets: [

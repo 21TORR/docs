@@ -1,0 +1,21 @@
+# Translations
+
+## TranslationHelper
+
+The `TranslationHelper` helps to resolve typical configurable translation use cases. In these cases you normally want to
+
+- pass a `string` to use as-is
+- pass a `TranslatableInterface` to automatically translate the value
+
+This can be done with the translation helper:
+
+```php
+function example (TranslationHelper $helper)
+{
+	// resolve the value as described above
+	$helper->resolve($value, $locale);
+
+	// same method as TranslatorInterface
+	$helper->trans($key, $parameter, $domain, $locale);
+}
+```
