@@ -1,0 +1,67 @@
+import {AddedBadge} from "@components/AddedBadge";
+
+# Component Sync
+
+## Automatic Sync
+
+<AddedBadge package="21torr/storyblok" version="5.3" />
+
+The Storyblok bundle integrates natively with the [hosting bundle] and offers an automatic sync when doing an app deployment:
+
+```shell
+bin/console hosting:hook:deploy-app
+```
+
+Before it actually syncs the components to Storyblok however, you need to enable the environments where the automatic sync is enabled:
+
+```yaml title="conf/packages/storyblok.yaml"
+storyblok:
+    sync_definitions_on_app_deploy:
+        staging: false
+        production: true
+```
+
+With this config the automatic sync is only enabled when deploying the app on production.[^1]
+
+
+## Manual Sync
+
+You can also manually sync the components using the CLI:
+
+```shell
+bin/console storyblok:definitions:sync
+```
+
+
+## Definitions Synced Event
+
+After a successful `storyblok:definitions:sync`, the bundle dispatches `StoryblokDefinitionsSyncedEvent`.
+
+### Event Data
+
+The event provides:
+
+- `io`: `TorrStyle` instance used by the sync command.
+- `adapter`: the adapter that was synced.
+
+### Listener Example
+
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Torr\Storyblok\Event\StoryblokDefinitionsSyncedEvent;
+
+#[AsEventListener]
+public function onDefinitionsSynced (StoryblokDefinitionsSyncedEvent $event) : void
+{
+	$event->io->writeln("Run post-sync work...");
+	$event->adapter->managementApi;
+}
+```
+
+### Notes
+
+- If multiple adapters are synced in one command run, one event is dispatched per adapter.
+- The event is only dispatched on successful sync.
+
+[hosting bundle]: /docs/php/symfony/hosting/
+[^1]: There is also a shortcut form `sync_definitions_on_app_deploy: false|true` that sets both settings at the same time.

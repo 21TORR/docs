@@ -14,6 +14,22 @@ const config = {
 
 	plugins: [
 		'docusaurus-plugin-sass',
+		function ()
+		{
+			return {
+				name: "tsconfig-paths",
+				configureWebpack ()
+				{
+					return {
+						resolve: {
+							tsConfig: {
+								configFile: require.resolve("./tsconfig.json"),
+							},
+						},
+					};
+				},
+			};
+		},
 	],
 
 	markdown: {
