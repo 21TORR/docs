@@ -126,10 +126,11 @@ These are called using the console commands:
 
 ```shell
 bin/console hosting:hook:build
-bin/console hosting:hook:deploy
+bin/console hosting:hook:deploy-container
+bin/console hosting:hook:deploy-app
 ```
 
-You can integrate into them by implementing the `BuildHookInterface` or `DeployHookInterface` interfaces respectively. Use autoconfiguration, then everything works out-of-the-box.
+You can integrate into them by implementing the `BuildHookInterface`, `DeployContainerHookInterface` or `DeployAppHookInterface` interfaces respectively. Use autoconfiguration, then everything works out-of-the-box.
 
 Every task has basically a label and a callback that can perform certain tasks:
 
@@ -153,6 +154,13 @@ class MyBuildTask implements BuildHookInterface
 	}
 }
 ```
+
+#### Deploy App vs Container
+
+The `deploy-container` hook is for deploying a single container. An application can consist of multiple containers (like hub and worker) and this deploy task should run in every container on every start.
+
+The `deploy-app` hook however is for the init container in Kubernetes. It should run exactly once on every app deployment (and not per container).
+
 
 ### App Validation
 
