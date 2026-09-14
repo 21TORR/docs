@@ -11,32 +11,32 @@
 		"write-translations": "docusaurus write-translations"
 	},
 	"dependencies": {
-		"@docusaurus/core": "^3.10.1",
-		"@docusaurus/faster": "^3.10.1",
-		"@docusaurus/preset-classic": "^3.10.1",
-		"@docusaurus/theme-classic": "^3.10.1",
-		"@iconify/react": "^6.0.0",
-		"@mdx-js/react": "^3.1.0",
+		"@docusaurus/core": "^3.10.2",
+		"@docusaurus/faster": "^3.10.2",
+		"@docusaurus/preset-classic": "^3.10.2",
+		"@docusaurus/theme-classic": "^3.10.2",
+		"@iconify/react": "^6.0.2",
+		"@mdx-js/react": "^3.1.1",
 		"clsx": "^2.1.1",
 		"prism-react-renderer": "^2.4.1",
 		"prismjs": "^1.30.0",
-		"react": "^19.1.0",
-		"react-dom": "^19.1.0"
+		"react": "^19.3.0",
+		"react-dom": "^19.3.0"
 	},
 	"devDependencies": {
-		"@docusaurus/module-type-aliases": "3.10.1",
-		"@docusaurus/types": "^3.10.1",
-		"@tsconfig/docusaurus": "^2.0.3",
+		"@docusaurus/module-type-aliases": "3.10.2",
+		"@docusaurus/types": "^3.10.2",
+		"@tsconfig/docusaurus": "^2.0.9",
 		"@types/node": "^22.15.29",
-		"@types/react": "^19.1.6",
-		"@types/react-dom": "^19.1.5",
-		"docusaurus-plugin-sass": "^0.2.6",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"docusaurus-plugin-sass": "^0.2.7",
 		"prettier-package-json": "^2.8.0",
-		"sass": "^1.89.1",
-		"sass-loader": "^16.0.5",
-		"ts-dedent": "^2.2.0",
-		"typescript": "^5.8.3",
-		"typescript-plugin-css-modules": "^5.1.0"
+		"sass": "^1.104.1",
+		"sass-loader": "^17.0.1",
+		"ts-dedent": "^2.3.0",
+		"typescript": "^7.0.2",
+		"typescript-plugin-css-modules": "^5.2.0"
 	},
 	"engines": {
 		"node": ">= 22"
