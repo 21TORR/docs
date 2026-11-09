@@ -23,8 +23,18 @@ Install the bundle:
 composer require 21torr/task-manager
 ```
 
-If you are using Symfony Flex you are all set.
+If you are using Symfony Flex you are all set: the recipe creates the configuration, including the [required message bus middleware](#message-bus-middleware).
 If not, you need to create an initial configuration file like [described below](#configuration).
+
+:::warning[Upgrading from v3]
+v4 requires a [message bus middleware](#message-bus-middleware) for the task log, which the v4 Flex recipe adds for you. Composer doesn't update recipes of installed packages automatically, so update it after upgrading the bundle:
+
+```bash
+composer recipes:update 21torr/task-manager
+```
+
+Flex only updates recipes if your git working tree is clean, so commit or stash your changes first.
+:::
 
 
 ## Configuration
@@ -33,12 +43,37 @@ While this bundle auto-detects all queue names, you should define them manually 
 
 ```yaml title="config/packages/task_manager.yaml"
 task_manager:
-queues:
-	# queues sorted by priority. Highest priority at the top
-	- app_very_urgent
-	- app_urgent
-	- app
+    queues:
+        # queues sorted by priority. Highest priority at the top
+        - app_very_urgent
+        - app_urgent
+        - app
 ```
+
+
+### Message Bus Middleware
+
+<AddedBadge package="21torr/task-manager" version="4.0.0" />
+
+The [task log](#task-log) is written by the `TaskIdentificationMiddleware`, which needs to be registered on your message bus.
+If you are using Symfony Flex, the recipe already adds it to `config/packages/task_manager.yaml`. Otherwise, add it manually:
+
+```yaml title="config/packages/task_manager.yaml"
+framework:
+    messenger:
+        buses:
+            messenger.bus.default:
+                middleware:
+                    - Torr\TaskManager\Identification\TaskIdentificationMiddleware
+```
+
+:::warning
+Without this middleware, no task log entries are written. Your tasks are still handled, but you won't see them in `task-manager:log` or any UI built on top of the task log.
+:::
+
+:::caution
+Symfony doesn't merge the `middleware` list of a bus across config files. If you configure additional middleware for `messenger.bus.default` somewhere else, the last definition wins, so you need to list the `TaskIdentificationMiddleware` there as well.
+:::
 
 
 ## Defining Tasks
@@ -323,6 +358,10 @@ The `TaskScheduler` automatically wraps all provided tasks in `DispatchAfterRunT
 ## Task Log
 
 The `TaskDirector` and `RunDirector` automatically log the output of your tasks, whether they succeeded and some metadata. This includes the task object itself, so it must be serializable.
+
+:::important
+The task log requires the [`TaskIdentificationMiddleware` to be registered](#message-bus-middleware) on your message bus.
+:::
 
 You can view the task log via the CLI:
 
