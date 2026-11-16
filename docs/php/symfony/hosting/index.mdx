@@ -155,6 +155,43 @@ class MyBuildTask implements BuildHookInterface
 }
 ```
 
+#### Failing a Hook
+
+If your hook can't finish its work, throw a `HookFailedException`. It is the same exception for all three types of hooks.
+
+```php
+use Torr\Hosting\Deployment\BuildHookInterface;
+use Torr\Hosting\Deployment\Exception\HookFailedException;
+use Torr\Hosting\Deployment\TaskCli;
+
+class MyBuildTask implements BuildHookInterface
+{
+	// ...
+
+	public function runPostBuild (TaskCli $io) : void
+	{
+		if (!$this->warmUpSomething())
+		{
+			throw new HookFailedException("Could not warm up something");
+		}
+	}
+}
+```
+
+The runner catches the exception and then:
+
+- prints the message as error in the CLI, including the label of the failed hook
+- logs the failure as `error` (with the exception in the log context)
+- skips all remaining hooks
+- exits the command with an error code, so your build / deployment fails
+
+:::tip
+The message of the exception is what ends up in the CLI output and in the log, so make it descriptive. If you are wrapping another exception, pass it as `previous`.
+:::
+
+Only this dedicated exception is handled like this. Every other exception is treated as an unexpected error: it is not caught by the runner and bubbles up to the console. The command fails in that case as well, but without the dedicated error reporting.
+
+
 #### Deploy App vs Container
 
 The `deploy-container` hook is for deploying a single container. An application can consist of multiple containers (like hub and worker) and this deploy task should run in every container on every start.
